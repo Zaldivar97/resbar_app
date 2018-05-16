@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author zaldivar
  */
 @Entity
-@Table(catalog = "resbar", schema = "")
+@Table(catalog = "resbar", schema = "", name="Parametro")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Parametro.findAll", query = "SELECT p FROM Parametro p")
