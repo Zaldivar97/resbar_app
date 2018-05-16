@@ -12,10 +12,15 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import sv.edu.uesocc.disenio2018.resbar.backend.DetalleOrden;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TemporalType;
 import sv.edu.uesocc.disenio2018.resbar.backend.Orden;
+import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorApplication;
 import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.IllegalOrphanException;
 import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.NonexistentEntityException;
 import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.PreexistingEntityException;
@@ -35,6 +40,81 @@ public class OrdenJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
+    public List<Orden> obtenerActivas() {
+        Query q = getEntityManager().createNamedQuery("Orden.findByEstado");
+        q.setParameter("estado", true);
+        return q.getResultList();
+    }
+
+    public List<Orden> buscarActivas(String parametro) {
+        Query q = getEntityManager().createNamedQuery("Orden.findByParametro");
+        q.setParameter("parametro", parametro);
+        return q.getResultList();
+    }
+
+    public int obtenerId() {
+        Query q = getEntityManager().createNamedQuery("Orden.maxId");
+        Object obj = q.getSingleResult();
+        if(obj == null){
+            return 1;
+        }
+        String str = obj.toString();
+        if(str.isEmpty()){
+            return 1;
+        }
+        
+        return Integer.parseInt(str);
+        
+    }
+
+    public List<Orden> obtenerVentas(Date inicio, Date fin){
+        Query q = getEntityManager().createNamedQuery("Orden.obtenerVentas");
+        q.setParameter("inicio", inicio, TemporalType.DATE);
+        q.setParameter("fin", fin, TemporalType.DATE);
+        return q.getResultList();
+    }
+    
+    
+    
+    
+    
+    public void destroy(Integer id) throws NonexistentEntityException {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Orden orden;
+            try {
+                orden = em.getReference(Orden.class, id);
+                orden.getIdOrden();
+            } catch (EntityNotFoundException enfe) {
+                throw new NonexistentEntityException("La orden con id " + id + " no existe");
+            }
+
+            List<DetalleOrden> detalleOrdenList = orden.getDetalleOrdenList();
+            for (DetalleOrden detalleOrden : detalleOrdenList) {
+                try {
+                    em.remove(detalleOrden);
+                } catch (Exception e) {
+                    Logger.getLogger(OrdenJpaController.class.getName()).log(Level.SEVERE, null, e);
+                    throw new ErrorApplication("Error al eliminar DetalleOrden de la Orden con id " + id + "\n" + e.getMessage());
+                }
+
+                try {
+
+                } catch (Exception e) {
+                }
+            }
+
+            em.remove(orden);
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
     public void create(Orden orden) throws PreexistingEntityException, Exception {
         if (orden.getDetalleOrdenList() == null) {
             orden.setDetalleOrdenList(new ArrayList<DetalleOrden>());
@@ -43,22 +123,9 @@ public class OrdenJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<DetalleOrden> attachedDetalleOrdenList = new ArrayList<DetalleOrden>();
-            for (DetalleOrden detalleOrdenListDetalleOrdenToAttach : orden.getDetalleOrdenList()) {
-                detalleOrdenListDetalleOrdenToAttach = em.getReference(detalleOrdenListDetalleOrdenToAttach.getClass(), detalleOrdenListDetalleOrdenToAttach.getDetalleOrdenPK());
-                attachedDetalleOrdenList.add(detalleOrdenListDetalleOrdenToAttach);
-            }
-            orden.setDetalleOrdenList(attachedDetalleOrdenList);
+            
             em.persist(orden);
-            for (DetalleOrden detalleOrdenListDetalleOrden : orden.getDetalleOrdenList()) {
-                Orden oldOrdenOfDetalleOrdenListDetalleOrden = detalleOrdenListDetalleOrden.getOrden();
-                detalleOrdenListDetalleOrden.setOrden(orden);
-                detalleOrdenListDetalleOrden = em.merge(detalleOrdenListDetalleOrden);
-                if (oldOrdenOfDetalleOrdenListDetalleOrden != null) {
-                    oldOrdenOfDetalleOrdenListDetalleOrden.getDetalleOrdenList().remove(detalleOrdenListDetalleOrden);
-                    oldOrdenOfDetalleOrdenListDetalleOrden = em.merge(oldOrdenOfDetalleOrdenListDetalleOrden);
-                }
-            }
+            
             em.getTransaction().commit();
         } catch (Exception ex) {
             if (findOrden(orden.getIdOrden()) != null) {
@@ -128,38 +195,6 @@ public class OrdenJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            Orden orden;
-            try {
-                orden = em.getReference(Orden.class, id);
-                orden.getIdOrden();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The orden with id " + id + " no longer exists.", enfe);
-            }
-            List<String> illegalOrphanMessages = null;
-            List<DetalleOrden> detalleOrdenListOrphanCheck = orden.getDetalleOrdenList();
-            for (DetalleOrden detalleOrdenListOrphanCheckDetalleOrden : detalleOrdenListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Orden (" + orden + ") cannot be destroyed since the DetalleOrden " + detalleOrdenListOrphanCheckDetalleOrden + " in its detalleOrdenList field has a non-nullable orden field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            em.remove(orden);
-            em.getTransaction().commit();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
-
     public List<Orden> findOrdenEntities() {
         return findOrdenEntities(true, -1, -1);
     }
@@ -205,5 +240,5 @@ public class OrdenJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }
