@@ -24,9 +24,9 @@ import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.Preexistin
  *
  * @author zaldivar
  */
-public class CategoriaJpaController implements Serializable {
+public class ManejadorCategoria implements Serializable {
 
-    public CategoriaJpaController(EntityManagerFactory emf) {
+    public ManejadorCategoria(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
