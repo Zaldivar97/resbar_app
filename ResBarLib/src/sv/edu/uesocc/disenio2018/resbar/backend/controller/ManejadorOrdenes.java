@@ -5,11 +5,20 @@
  */
 package sv.edu.uesocc.disenio2018.resbar.backend.controller;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
+
 /**
  *
  * @author zaldivar
  */
 public class ManejadorOrdenes {
 
+    protected static EntityManager getEM() {
+        return Persistence.createEntityManagerFactory("ResbarBackendPU").createEntityManager();
+    }
+    
+    
+    
     
 }

@@ -8,9 +8,9 @@
     <class>sv.edu.uesocc.disenio2018.resbar.backend.entities.Orden</class>
     <class>sv.edu.uesocc.disenio2018.resbar.backend.entities.Producto</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/resbar?autoReconnect=true"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mariadb://localhost:3306/resbar"/>
       <property name="javax.persistence.jdbc.user" value="resbar"/>
-      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/>
       <property name="javax.persistence.jdbc.password" value="Restaurante2018"/>
     </properties>
   </persistence-unit>

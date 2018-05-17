@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -21,12 +22,8 @@ import sv.edu.uesocc.disenio2018.resbar.backend.entities.Producto;
  */
 public class ManejadorProductos  {
    
-    private ManejadorProductos(){
-        
-    }
-    
     protected static EntityManager getEM() {
-        return DBUtil.getEmFactory("ResbarBackendPU").createEntityManager();
+        return Persistence.createEntityManagerFactory("ResbarBackendPU").createEntityManager();
     }
 
     protected static void insertar(Producto entity) {
@@ -52,7 +49,7 @@ public class ManejadorProductos  {
         }
     }
 
-    protected static Producto eliminar(Producto entity) {
+    protected static void eliminar(Producto entity) {
         EntityManager eml = getEM();
         EntityTransaction trans = eml.getTransaction();
         try {
@@ -62,21 +59,20 @@ public class ManejadorProductos  {
             eml.remove(eml.merge(entity));
 
             trans.commit();
-            return entity;
+            
         } catch (Exception ex) {
             if (trans.isActive()) {
                 trans.rollback();
             }
             
-            return null;
-            
+           
         } finally {
 
             eml.close();
         }
     }
 
-    protected static boolean actualizar(Producto entityObject) {
+    protected static void actualizar(Producto entityObject) {
         EntityManager eml = getEM();
         EntityTransaction et = eml.getTransaction();
         try {
@@ -85,12 +81,11 @@ public class ManejadorProductos  {
             }
             eml.merge(entityObject);
             et.commit();
-            return true;
         } catch (Exception ex) {
             if (et.isActive()) {
                 et.rollback();
             }
-            return false;
+            
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -106,7 +101,6 @@ public class ManejadorProductos  {
         try {
             return eml.find(Producto.class, id);
         } catch (Exception e) {
-            System.err.print("El error es :"+e);
             return null;
         } finally {
             if (eml.isOpen()) {

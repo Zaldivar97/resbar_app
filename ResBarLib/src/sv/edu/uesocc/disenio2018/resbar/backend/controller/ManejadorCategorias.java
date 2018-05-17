@@ -5,7 +5,6 @@
  */
 package sv.edu.uesocc.disenio2018.resbar.backend.controller;
 
-import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -21,10 +20,6 @@ import sv.edu.uesocc.disenio2018.resbar.backend.entities.Categoria;
  * @author irvin
  */
 public class ManejadorCategorias {
-
-    private ManejadorCategorias() {
-
-    }
 
     protected static EntityManager getEM() {
         return Persistence.createEntityManagerFactory("ResbarBackendPU").createEntityManager();
@@ -44,7 +39,7 @@ public class ManejadorCategorias {
             if (et.isActive()) {
                 et.rollback();
             }
-            throw new ErrorApplication("Fallo al crear la categoria --> $ManejadorCategorias.insertar() ---> " + ex.getMessage());
+            throw new ErrorApplication("Fallo al crear la categoria --> $ManejadorCategorias.insertar() --> " + ex.getMessage());
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -66,7 +61,7 @@ public class ManejadorCategorias {
             if (trans.isActive()) {
                 trans.rollback();
             }
-            throw new ErrorApplication("Fallo eliminar la categoria --> $ManejadorCategorias.eliminar() ---> " + ex.getMessage());
+            throw new ErrorApplication("Fallo eliminar la categoria --> $ManejadorCategorias.eliminar() --> " + ex.getMessage());
         } finally {
             eml.close();
         }
@@ -85,7 +80,7 @@ public class ManejadorCategorias {
             if (et.isActive()) {
                 et.rollback();
             }
-            throw new ErrorApplication("Fallo actualizar la categoria --> $ManejadorCategorias.actualizar() ---> " + ex.getMessage());
+            throw new ErrorApplication("Fallo actualizar la categoria --> $ManejadorCategorias.actualizar() --> " + ex.getMessage());
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -98,12 +93,12 @@ public class ManejadorCategorias {
         EntityManager eml = getEM();
         try {
             CriteriaQuery cq = eml.getCriteriaBuilder().createQuery(Integer.class);
-            Root producto = cq.from(Categoria.class);
-            cq.select(eml.getCriteriaBuilder().max(producto.get("idCategoria")));
+            Root categoria = cq.from(Categoria.class);
+            cq.select(eml.getCriteriaBuilder().max(categoria.get("idCategoria")));
             Query q = eml.createQuery(cq);
             return ((int) q.getSingleResult()) + 1;
         } catch (Exception ex) {
-            throw new ErrorApplication("Fallo obtenerID para la nueva categoria --> $ManejadorCategorias.obtenerID() ---> " + ex.getMessage());
+            throw new ErrorApplication("Fallo obtenerID para la nueva categoria --> $ManejadorCategorias.obtenerID() --> " + ex.getMessage());
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -119,7 +114,7 @@ public class ManejadorCategorias {
                 Query query = eml.createNamedQuery("Categoria.findAll");
                 return query.getResultList();
             } catch (Exception ex) {
-                throw new ErrorApplication("Fallo obtener lista de categorias --> $ManejadorCategorias.obtener() ---> " + ex.getMessage());
+                throw new ErrorApplication("Fallo obtener lista de categorias --> $ManejadorCategorias.obtener() --> " + ex.getMessage());
             } finally {
                 if (eml.isOpen()) {
                     eml.close();
@@ -130,7 +125,7 @@ public class ManejadorCategorias {
                 Query query = eml.createNamedQuery("Categoria.findAllWithoutDetails");
                 return query.getResultList();
             } catch (Exception ex) {
-                throw new ErrorApplication("Fallo obtener lista de categorias sin detalles --> $ManejadorCategorias.obtener() ---> " + ex.getMessage());
+                throw new ErrorApplication("Fallo obtener lista de categorias sin detalles --> $ManejadorCategorias.obtener() --> " + ex.getMessage());
             } finally {
                 if (eml.isOpen()) {
                     eml.close();
