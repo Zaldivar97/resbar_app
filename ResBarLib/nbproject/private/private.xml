@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/home/irvin/ArchivosMicro/DSI135/resbar_app/ResbarBackend/src/sv/edu/uesocc/disenio2018/resbar/backend/entities/Categoria.java</file>
+            <file>file:/home/irvin/ArchivosMicro/DSI135/resbar_app/ResbarBackend/src/sv/edu/uesocc/disenio2018/resbar/backend/controller/ManejadorProductos.java</file>
+            <file>file:/home/irvin/ArchivosMicro/DSI135/resbar_app/ResbarBackend/src/sv/edu/uesocc/disenio2018/resbar/backend/entities/DetalleOrdenPK.java</file>
+            <file>file:/home/irvin/ArchivosMicro/DSI135/resbar_app/ResbarBackend/src/sv/edu/uesocc/disenio2018/resbar/backend/controller/DBUtil.java</file>
+            <file>file:/home/irvin/ArchivosMicro/DSI135/resbar_app/ResbarBackend/src/sv/edu/uesocc/disenio2018/resbar/backend/entities/DetalleOrden.java</file>
+            <file>file:/home/irvin/ArchivosMicro/DSI135/resbar_app/ResbarBackend/src/sv/edu/uesocc/disenio2018/resbar/backend/entities/Orden.java</file>
+        </group>
+    </open-files>
+</project-private>
