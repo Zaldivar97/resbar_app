@@ -12,7 +12,7 @@ import javax.persistence.EntityManager;
  *
  * @author zaldivar
  */
-public class ManejadorCategoria extends Controller{
+public class ManejadorCategoria {
 //
     public static EntityManager d() {
         return DBUtil.getEmFactory("ResbarBackendPU").createEntityManager();

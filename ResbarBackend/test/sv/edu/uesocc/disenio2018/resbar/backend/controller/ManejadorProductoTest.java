@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import sv.edu.uesocc.disenio2018.resbar.backend.entities.Categoria;
 import sv.edu.uesocc.disenio2018.resbar.backend.entities.Producto;
 
@@ -45,19 +46,24 @@ public class ManejadorProductoTest {
     /**
      * Test of obtenerxCategoria method, of class ManejadorProducto.
      */
+//    @Ignore
     @Test
     public void Testcreate() {
         Producto producto = new Producto(ManejadorProducto.obtenerID(), "nombre", BigDecimal.ONE, '1');
-        ManejadorCategoria.init(Categoria.class);
-        Categoria categoria = (Categoria) ManejadorCategoria.obtener(1);
+        Categoria categoria=null;
         producto.setIdCategoria(categoria);
-
-
         ManejadorProducto.insertar(producto);
         System.out.println("el ID es: " + producto.getIdProducto());
-        Producto expected = (Producto) ManejadorProducto.Obtener(producto.getIdProducto());
+        Producto expected = (Producto) ManejadorProducto.obtener(producto.getIdProducto());
         assertNotNull(expected);
         assertEquals(producto.getIdProducto(), expected.getIdProducto());
+        fail("falloooooooooooooo");
     }
 
+    @Test
+    public void TestMax(){
+        int result=ManejadorProducto.obtenerID();
+        assertEquals(17, result);
+    }
+    
 }
