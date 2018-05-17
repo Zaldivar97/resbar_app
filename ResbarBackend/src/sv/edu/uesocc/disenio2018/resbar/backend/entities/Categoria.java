@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sv.edu.uesocc.disenio2018.resbar.backend;
+package sv.edu.uesocc.disenio2018.resbar.backend.entities;
 
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -16,16 +17,13 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author zaldivar
  */
 @Entity
-@Table(catalog = "resbar", schema = "")
-@XmlRootElement
+@Table(name = "Categoria", catalog = "resbar", schema = "")
 @NamedQueries({
     @NamedQuery(name = "Categoria.findAll", query = "SELECT c FROM Categoria c")
     , @NamedQuery(name = "Categoria.findByIdCategoria", query = "SELECT c FROM Categoria c WHERE c.idCategoria = :idCategoria")
@@ -35,10 +33,12 @@ public class Categoria implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
+    @Column(name = "idCategoria", nullable = false)
     private Integer idCategoria;
     @Basic(optional = false)
+    @Column(name = "nombre", nullable = false, length = 200)
     private String nombre;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCategoria", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCategoria", fetch = FetchType.EAGER)
     private List<Producto> productoList;
 
     public Categoria() {
@@ -69,7 +69,6 @@ public class Categoria implements Serializable {
         this.nombre = nombre;
     }
 
-    @XmlTransient
     public List<Producto> getProductoList() {
         return productoList;
     }
@@ -100,7 +99,7 @@ public class Categoria implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.edu.uesocc.disenio2018.resbar.backend.Categoria[ idCategoria=" + idCategoria + " ]";
+        return "sv.edu.uesocc.disenio2018.resbar.backend.entities.Categoria[ idCategoria=" + idCategoria + " ]";
     }
     
 }

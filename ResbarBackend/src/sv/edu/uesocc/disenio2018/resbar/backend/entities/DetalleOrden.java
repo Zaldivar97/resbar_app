@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sv.edu.uesocc.disenio2018.resbar.backend;
+package sv.edu.uesocc.disenio2018.resbar.backend.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,15 +17,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author zaldivar
  */
 @Entity
-@Table(catalog = "resbar", schema = "")
-@XmlRootElement
+@Table(name = "DetalleOrden", catalog = "resbar", schema = "")
 @NamedQueries({
     @NamedQuery(name = "DetalleOrden.findAll", query = "SELECT d FROM DetalleOrden d")
     , @NamedQuery(name = "DetalleOrden.findByIdOrden", query = "SELECT d FROM DetalleOrden d WHERE d.detalleOrdenPK.idOrden = :idOrden")
@@ -37,12 +36,13 @@ public class DetalleOrden implements Serializable {
     protected DetalleOrdenPK detalleOrdenPK;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
+    @Column(name = "cantidad", nullable = false, precision = 8, scale = 2)
     private BigDecimal cantidad;
-    @JoinColumn(name = "idOrden", referencedColumnName = "idOrden", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "idOrden", referencedColumnName = "idOrden", nullable = false, insertable = false, updatable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Orden orden;
-    @JoinColumn(name = "idProducto", referencedColumnName = "idProducto", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "idProducto", referencedColumnName = "idProducto", nullable = false, insertable = false, updatable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Producto producto;
 
     public DetalleOrden() {
@@ -115,7 +115,7 @@ public class DetalleOrden implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.edu.uesocc.disenio2018.resbar.backend.DetalleOrden[ detalleOrdenPK=" + detalleOrdenPK + " ]";
+        return "sv.edu.uesocc.disenio2018.resbar.backend.entities.DetalleOrden[ detalleOrdenPK=" + detalleOrdenPK + " ]";
     }
     
 }

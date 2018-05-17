@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sv.edu.uesocc.disenio2018.resbar.backend;
+package sv.edu.uesocc.disenio2018.resbar.backend.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -20,16 +21,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author zaldivar
  */
 @Entity
-@Table(catalog = "resbar", schema = "")
-@XmlRootElement
+@Table(name = "Orden", catalog = "resbar", schema = "")
 @NamedQueries({
     @NamedQuery(name = "Orden.findAll", query = "SELECT o FROM Orden o")
     , @NamedQuery(name = "Orden.findByIdOrden", query = "SELECT o FROM Orden o WHERE o.idOrden = :idOrden")
@@ -45,23 +43,31 @@ public class Orden implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
+    @Column(name = "idOrden", nullable = false)
     private Integer idOrden;
     @Basic(optional = false)
+    @Column(name = "mesero", nullable = false, length = 100)
     private String mesero;
     @Basic(optional = false)
+    @Column(name = "mesa", nullable = false, length = 100)
     private String mesa;
     @Basic(optional = false)
+    @Column(name = "cliente", nullable = false, length = 100)
     private String cliente;
     @Basic(optional = false)
+    @Column(name = "fecha", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
+    @Column(name = "comentario", length = 350)
     private String comentario;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
+    @Column(name = "total", nullable = false, precision = 10, scale = 4)
     private BigDecimal total;
     @Basic(optional = false)
+    @Column(name = "estado", nullable = false)
     private boolean estado;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orden", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orden", fetch = FetchType.EAGER)
     private List<DetalleOrden> detalleOrdenList;
 
     public Orden() {
@@ -145,7 +151,6 @@ public class Orden implements Serializable {
         this.estado = estado;
     }
 
-    @XmlTransient
     public List<DetalleOrden> getDetalleOrdenList() {
         return detalleOrdenList;
     }
@@ -176,7 +181,7 @@ public class Orden implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.edu.uesocc.disenio2018.resbar.backend.Orden[ idOrden=" + idOrden + " ]";
+        return "sv.edu.uesocc.disenio2018.resbar.backend.entities.Orden[ idOrden=" + idOrden + " ]";
     }
     
 }

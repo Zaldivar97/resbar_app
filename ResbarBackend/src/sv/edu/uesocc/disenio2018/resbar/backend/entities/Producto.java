@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sv.edu.uesocc.disenio2018.resbar.backend;
+package sv.edu.uesocc.disenio2018.resbar.backend.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -19,16 +20,13 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author zaldivar
  */
 @Entity
-@Table(catalog = "resbar", schema = "")
-@XmlRootElement
+@Table(name = "Producto", catalog = "resbar", schema = "")
 @NamedQueries({
     @NamedQuery(name = "Producto.findAll", query = "SELECT p FROM Producto p")
     , @NamedQuery(name = "Producto.findByIdProducto", query = "SELECT p FROM Producto p WHERE p.idProducto = :idProducto")
@@ -42,21 +40,26 @@ public class Producto implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
+    @Column(name = "idProducto", nullable = false)
     private Integer idProducto;
     @Basic(optional = false)
+    @Column(name = "nombre", nullable = false, length = 200)
     private String nombre;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
+    @Column(name = "precio", nullable = false, precision = 10, scale = 4)
     private BigDecimal precio;
     @Basic(optional = false)
+    @Column(name = "area", nullable = false)
     private Character area;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "producto", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "producto", fetch = FetchType.EAGER)
     private List<DetalleOrden> detalleOrdenList;
-    @JoinColumn(name = "idCategoria", referencedColumnName = "idCategoria")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "idCategoria", referencedColumnName = "idCategoria", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Categoria idCategoria;
 
     public Producto() {
+        
     }
 
     public Producto(Integer idProducto) {
@@ -102,7 +105,6 @@ public class Producto implements Serializable {
         this.area = area;
     }
 
-    @XmlTransient
     public List<DetalleOrden> getDetalleOrdenList() {
         return detalleOrdenList;
     }
@@ -141,7 +143,7 @@ public class Producto implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.edu.uesocc.disenio2018.resbar.backend.Producto[ idProducto=" + idProducto + " ]";
+        return "sv.edu.uesocc.disenio2018.resbar.backend.entities.Producto[ idProducto=" + idProducto + " ]";
     }
     
 }

@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sv.edu.uesocc.disenio2018.resbar.backend;
+package sv.edu.uesocc.disenio2018.resbar.backend.entities;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 /**
@@ -17,8 +18,10 @@ import javax.persistence.Embeddable;
 public class DetalleOrdenPK implements Serializable {
 
     @Basic(optional = false)
+    @Column(name = "idOrden", nullable = false)
     private int idOrden;
     @Basic(optional = false)
+    @Column(name = "idProducto", nullable = false)
     private int idProducto;
 
     public DetalleOrdenPK() {
@@ -71,7 +74,7 @@ public class DetalleOrdenPK implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.edu.uesocc.disenio2018.resbar.backend.DetalleOrdenPK[ idOrden=" + idOrden + ", idProducto=" + idProducto + " ]";
+        return "sv.edu.uesocc.disenio2018.resbar.backend.entities.DetalleOrdenPK[ idOrden=" + idOrden + ", idProducto=" + idProducto + " ]";
     }
     
 }

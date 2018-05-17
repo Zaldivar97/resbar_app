@@ -12,123 +12,143 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import sv.edu.uesocc.disenio2018.resbar.backend.Categoria;
+import sv.edu.uesocc.disenio2018.resbar.backend.entities.Categoria;
 
 /**
  *
  * @author zaldivar
  */
-public abstract class Controller implements Serializable {
+public class Controller implements Serializable {
 
     private static Class<?> ENTITY;
-    
-    private static EntityManager em;
-    
-    public Controller(Class<?> entity,EntityManager em) {
-        Controller.em=em;
-        Controller.ENTITY=entity;
+
+    protected static void init(Class<?> entity) {
+        Controller.ENTITY = entity;
     }
 
-    public static void insertar(Object entity) {
+    protected static EntityManager getEM() {
+        return DBUtil.getEmFactory("ResbarBackendPU").createEntityManager();
+    }
 
-        EntityTransaction et = null;
+    protected static void insertar(Object entity) {
+        EntityManager eml = getEM();
+        EntityTransaction et = eml.getTransaction();
         try {
-            et = em.getTransaction();
-            et.begin();
-
-            em.persist(entity);
-
-            em.getTransaction().commit();
-        } catch (Exception ex) {
-
-        } finally {
-            if (em != null) {
-                em.close();
+            if (!et.isActive()) {
+                et.begin();
             }
-            if (et != null) {
+            eml.persist(entity);
+            et.commit();
+        } catch (Exception ex) {
+            if (et.isActive()) {
                 et.rollback();
             }
+        } finally {
+            if (eml.isOpen()) {
+                eml.close();
+            }
+
         }
     }
 
-    public static Object eliminar(Object entity) {
-        EntityTransaction trans = em.getTransaction();
-        trans.begin();
+    protected static Object eliminar(Object entity) {
+        EntityManager eml = getEM();
+        EntityTransaction trans = eml.getTransaction();
         try {
-
-            em.remove(em.merge(entity));
+            if (!trans.isActive()) {
+                trans.begin();
+            }
+            eml.remove(eml.merge(entity));
 
             trans.commit();
             return entity;
         } catch (Exception e) {
+            if (trans.isActive()) {
+                trans.rollback();
+            }
             return null;
         } finally {
-            trans.rollback();
 
-            em.close();
+            eml.close();
         }
     }
 
-    public static boolean actualizar(Object entityObject) {
-        EntityTransaction et = null;
+    protected static boolean actualizar(Object entityObject) {
+        EntityManager eml = getEM();
+        EntityTransaction et = eml.getTransaction();
         try {
-            et = em.getTransaction();
-            et.begin();
-            em.merge(entityObject);
+            if (!et.isActive()) {
+                et.begin();
+            }
+            eml.merge(entityObject);
             et.commit();
             return true;
         } catch (Exception ex) {
-            return false;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-            if (et != null) {
+            if (et.isActive()) {
                 et.rollback();
             }
+            return false;
+        } finally {
+            if (eml.isOpen()) {
+                eml.close();
+            }
+
         }
     }
 
-    public static List<Object> findEntities() {
+    protected static List<Object> findEntities() {
         return findEntities(true, -1, -1);
     }
 
-    public static List<Object> findEntities(int maxResults, int firstResult) {
+    protected static List<Object> findEntities(int maxResults, int firstResult) {
         return findEntities(false, maxResults, firstResult);
     }
 
     private static List<Object> findEntities(boolean all, int maxResults, int firstResult) {
+        EntityManager eml = getEM();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            CriteriaQuery cq = eml.getCriteriaBuilder().createQuery();
             cq.select(cq.from(ENTITY));
-            Query q = em.createQuery(cq);
+            Query q = eml.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
             }
             return q.getResultList();
         } finally {
-            em.close();
+            if (eml.isOpen()) {
+                eml.close();
+            }
         }
     }
 
-    public Object obtener(Integer id) {
+    protected static Object obtener(Integer id) {
+        EntityManager eml = getEM();
         try {
-            return em.find(ENTITY, id);
+            return eml.find(ENTITY, id);
+        } catch (Exception e) {
+            System.err.print("El error es :"+e);
+            return null;
         } finally {
-            em.close();
+            if (eml.isOpen()) {
+                eml.close();
+            }
+
         }
     }
 
-    public static int getCount() {
+    protected static int getCount() {
+        EntityManager eml = getEM();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            CriteriaQuery cq = eml.getCriteriaBuilder().createQuery();
             Root<Categoria> rt = cq.from(ENTITY);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
+            cq.select(eml.getCriteriaBuilder().count(rt));
+            Query q = eml.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
         } finally {
-            em.close();
+            if (eml.isOpen()) {
+                eml.close();
+            }
         }
     }
 }

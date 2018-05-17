@@ -1,14 +1,14 @@
-package sv.edu.uesocc.disenio2018.resbar.backend;
+package sv.edu.uesocc.disenio2018.resbar.backend.entities;
 
 import java.math.BigDecimal;
 import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
-import sv.edu.uesocc.disenio2018.resbar.backend.DetalleOrdenPK;
-import sv.edu.uesocc.disenio2018.resbar.backend.Orden;
-import sv.edu.uesocc.disenio2018.resbar.backend.Producto;
+import sv.edu.uesocc.disenio2018.resbar.backend.entities.DetalleOrdenPK;
+import sv.edu.uesocc.disenio2018.resbar.backend.entities.Orden;
+import sv.edu.uesocc.disenio2018.resbar.backend.entities.Producto;
 
-@Generated(value="EclipseLink-2.6.1.v20150605-rNA", date="2018-05-15T19:27:50")
+@Generated(value="EclipseLink-2.6.1.v20150605-rNA", date="2018-05-17T01:09:36")
 @StaticMetamodel(DetalleOrden.class)
 public class DetalleOrden_ { 
 

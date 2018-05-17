@@ -9,48 +9,54 @@ import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import sv.edu.uesocc.disenio2018.resbar.backend.Producto;
+import sv.edu.uesocc.disenio2018.resbar.backend.entities.Producto;
 
 /**
  *
  * @author zaldivar
  */
-public class ManejadorProducto extends Controller{
+public class ManejadorProducto extends Controller {
 
-    private final EntityManager em;
-    
-    public ManejadorProducto(EntityManager em) {
-        super(Producto.class, em);
-        this.em=em;
-    }
-
-    public List<Producto> obtenerxCategoria(int id){
+    public static List<Producto> obtenerxCategoria(int id) {
+        EntityManager eml = getEM();//entitymanagerlocal
         try {
-        Query query = em.createNamedQuery("Producto.findByCategoria");
-        query.setParameter("categoria", id);
-        return query.getResultList();
+
+            Query query = eml.createNamedQuery("Producto.findByCategoria");
+            query.setParameter("categoria", id);
+            return query.getResultList();
         } catch (Exception e) {
             return Collections.EMPTY_LIST;
-        }finally{
-            em.close();
+        } finally {
+            if (eml.isOpen()) {
+                eml.close();
+            }
         }
     }
-    
-    public List<Producto> buscar(String charSequence){
+
+    public static List<Producto> buscar(String charSequence) {
+        EntityManager eml = getEM();
         try {
-            Query query = em.createNamedQuery("Producto.findByCharsequence");
+            Query query = eml.createNamedQuery("Producto.findByCharsequence");
             query.setParameter("nombre", charSequence);
             return query.getResultList();
         } catch (Exception e) {
             return Collections.EMPTY_LIST;
-        }
-        finally{
-            em.close();
+        } finally {
+            if (eml.isOpen()) {
+                eml.close();
+            }
         }
     }
+
+    public static Object Obtener(Integer id){
+        init(Producto.class);
+        return obtener(id);
+    }
+
     
-    public int obtenerID(){
+    public static int obtenerID() {
+        init(Producto.class);
         return getCount() + 1;
     }
-    
+
 }

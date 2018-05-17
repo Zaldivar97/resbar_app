@@ -3,24 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sv.edu.uesocc.disenio2018.resbar.backend;
+package sv.edu.uesocc.disenio2018.resbar.backend.entities;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author zaldivar
  */
 @Entity
-@Table(catalog = "resbar", schema = "")
-@XmlRootElement
+@Table(name = "Parametro", catalog = "resbar", schema = "")
 @NamedQueries({
     @NamedQuery(name = "Parametro.findAll", query = "SELECT p FROM Parametro p")
     , @NamedQuery(name = "Parametro.findByIdParametro", query = "SELECT p FROM Parametro p WHERE p.idParametro = :idParametro")
@@ -31,10 +30,13 @@ public class Parametro implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
+    @Column(name = "idParametro", nullable = false)
     private Integer idParametro;
     @Basic(optional = false)
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
     @Basic(optional = false)
+    @Column(name = "valor", nullable = false, length = 400)
     private String valor;
 
     public Parametro() {
@@ -96,7 +98,7 @@ public class Parametro implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.edu.uesocc.disenio2018.resbar.backend.Parametro[ idParametro=" + idParametro + " ]";
+        return "sv.edu.uesocc.disenio2018.resbar.backend.entities.Parametro[ idParametro=" + idParametro + " ]";
     }
     
 }

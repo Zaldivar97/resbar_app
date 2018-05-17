@@ -13,10 +13,10 @@ import javax.persistence.Persistence;
  * @author zaldivar
  */
 public class DBUtil {
-    private static final EntityManagerFactory ENF = Persistence.createEntityManagerFactory("ResbarBackendPU");
+   
     
-    public static EntityManagerFactory getEmFactory(){
-        return ENF;
+    public static EntityManagerFactory getEmFactory(String PUName){
+        return Persistence.createEntityManagerFactory(PUName);
     }
     
 }

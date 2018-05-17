@@ -6,14 +6,17 @@
 package sv.edu.uesocc.disenio2018.resbar.backend.controller;
 
 import java.io.Serializable;
+import javax.persistence.EntityManager;
 
 /**
  *
  * @author zaldivar
  */
-public class ManejadorCategoria implements Serializable {
+public class ManejadorCategoria extends Controller{
 //
-    
+    public static EntityManager d() {
+        return DBUtil.getEmFactory("ResbarBackendPU").createEntityManager();
+    }
 }
 
 //    public ManejadorCategoria(EntityManagerFactory emf) {
