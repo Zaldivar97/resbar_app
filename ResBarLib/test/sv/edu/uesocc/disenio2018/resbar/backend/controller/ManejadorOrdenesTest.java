@@ -174,10 +174,10 @@ public class ManejadorOrdenesTest {
     @Test(expected = ErrorApplication.class)
     public void ztestEliminar() {
         System.out.println("eliminar");
-        Orden orden = ManejadorOrdenes.obtener(1);
+        Orden orden = ManejadorOrdenes.obtener(9);
         ManejadorOrdenes.eliminar(orden);
         
-        ManejadorOrdenes.obtener(1);
+        ManejadorOrdenes.obtener(9);
     }
     
     
