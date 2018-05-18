@@ -53,6 +53,7 @@ public class ManejadorProductosTest {
         Categoria categoria=null;
         producto.setIdCategoria(categoria);
         ManejadorProductos.insertar(producto);
+        
         System.out.println("el ID es: " + producto.getIdProducto());
         Producto expected = (Producto) ManejadorProductos.obtener(producto.getIdProducto());
         assertNotNull(expected);
