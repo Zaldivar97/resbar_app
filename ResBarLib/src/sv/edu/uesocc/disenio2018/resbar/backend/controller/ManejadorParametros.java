@@ -10,10 +10,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import static sv.edu.uesocc.disenio2018.resbar.backend.controller.ManejadorProductos.getEM;
 import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorApplication;
 import sv.edu.uesocc.disenio2018.resbar.backend.entities.Parametro;
-import sv.edu.uesocc.disenio2018.resbar.backend.entities.Producto;
 
 /**
  *
@@ -38,7 +36,7 @@ public class ManejadorParametros {
             if (et.isActive()) {
                 et.rollback();
             }
-            throw new ErrorApplication("Fallo actualizar el parámetro --> $ManejadorPaŕametros.actualizar() --> " + ex.getMessage());
+            throw new ErrorApplication("Fallo actualizar el parámetro --> $ManejadorPaŕametros.actualizar()");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -47,12 +45,13 @@ public class ManejadorParametros {
         }
     }
 
-    protected static Object obtener(Integer id) {
+    //Revisar el return
+    protected static Parametro obtener(Integer id) {
         EntityManager eml = getEM();
         try {
-            return eml.find(Producto.class, id);
+            return eml.find(Parametro.class, id);
         } catch (Exception e) {
-            return null;
+            throw new ErrorApplication("Fallo obtener el parámetro --> $ManejadorPaŕametros.obtener()");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -67,7 +66,7 @@ public class ManejadorParametros {
             Query query = eml.createNamedQuery("Parametro.findAll");
             return query.getResultList();
         } catch (Exception ex) {
-            throw new ErrorApplication("Fallo obtener lista de Parámetros --> $ManejadorParámetros --> " + ex.getMessage());
+            throw new ErrorApplication("Fallo obtener la lista de parámetros --> $ManejadorParámetros.obtener()");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
