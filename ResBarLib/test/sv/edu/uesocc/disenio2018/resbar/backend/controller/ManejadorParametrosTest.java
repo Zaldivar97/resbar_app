@@ -40,20 +40,20 @@ public class ManejadorParametrosTest {
     public void tearDown() {
     }  
 
-//    /**
-//     * Test of getEM method, of class ManejadorParametros.
-//     */
-//    @Test
-//    public void testGetEM() {
-//        System.out.println("getEM");
-//        EntityManager expResult = null;
-//        EntityManager result = ManejadorParametros.getEM();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-
-
+    /**
+     * Test of actualizar method, of class ManejadorParametros.
+     */
+    @Test
+    public void testActualizar() {
+        System.out.println("actualizar");
+        Parametro parametro = new Parametro(1, "Empresa", "ABCD");
+        ManejadorParametros.actualizar(parametro);
+        
+        Parametro expected = ManejadorParametros.obtener(1);
+        assertEquals(expected.getNombre(), parametro.getNombre());
+        assertEquals(expected.getValor(), parametro.getValor());
+    }
+    
     /**
      * Test of obtener method, of class ManejadorParametros.
      */
@@ -63,11 +63,8 @@ public class ManejadorParametrosTest {
         Integer id = 1;
         Parametro expResult = new Parametro(1, "empresa", "ABC");
         Parametro result = ManejadorParametros.obtener(id);
-        assertEquals(expResult.getIdParametro(), result.getIdParametro());
         assertEquals(expResult.getNombre(), result.getNombre());
         assertEquals(expResult.getValor(), result.getValor());
-        // TODO review the generated test code and remove the default call to fail.
-        //fail("The test case is a prototype.");
     }
 
     /**
@@ -76,22 +73,8 @@ public class ManejadorParametrosTest {
     @Test
     public void testObtener_0args() {
         System.out.println("obtener");
-        List<Parametro> expResult = null;
+        int expected= 7;
         List<Parametro> result = ManejadorParametros.obtener();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        //fail("The test case is a prototype.");
-    }
-    
-    /**
-     * Test of actualizar method, of class ManejadorParametros.
-     */
-    @Test
-    public void testActualizar() {
-        System.out.println("actualizar");
-        Parametro entityObject = new Parametro(1, "empresa", "ABC");
-        ManejadorParametros.actualizar(entityObject);
-        // TODO review the generated test code and remove the default call to fail.
-        //fail("The test case is a prototype.");
+        assertEquals(expected, result.size());
     }
 }

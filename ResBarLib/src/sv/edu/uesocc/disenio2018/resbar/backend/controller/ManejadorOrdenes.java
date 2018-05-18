@@ -199,17 +199,3 @@ public class ManejadorOrdenes {
     }
 }
 
-//  
-//    protected static Object obtener(Integer id) {
-//        EntityManager eml = getEM();
-//        try {
-//            return eml.find(Orden.class, id);
-//        } catch (Exception e) {
-//            return null;
-//        } finally {
-//            if (eml.isOpen()) {
-//                eml.close();
-//            }
-//
-//        }
-//    }

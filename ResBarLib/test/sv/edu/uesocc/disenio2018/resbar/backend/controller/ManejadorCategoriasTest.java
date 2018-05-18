@@ -38,33 +38,43 @@ public class ManejadorCategoriasTest {
     @After
     public void tearDown() {
     }
-
-    /**
-     * Test of actualizar method, of class ManejadorCategorias.
-     */
-    @Test
-    public void testActualizar() {
-        System.out.println("actualizar");
-        Categoria categoria = new Categoria(3, "Postres nuevos");
-        ManejadorCategorias.actualizar(categoria);
-//        Categoria expected = ;
-//        assertEquals(expected, categoria.getNombre());
-        // TODO review the generated test code and remove the default call to fail.
-        //fail("The test case is a prototype.");
-    }
-
+    
     /**
      * Test of obtenerId method, of class ManejadorCategorias.
      */
     @Test
     public void testObtenerID() {
         System.out.println("obtenerID");
-        int expResult = 4;
+        int expected = 4;
         int result = ManejadorCategorias.obtenerID();
-        assertEquals(expResult, result);
-         //TODO review the generated test code and remove the default call to fail.
-        //fail("The test case is a prototype.");
+        assertEquals(expected, result);
     }
+
+    /**
+     * Test of obtener method, of class ManejadorCategorias.
+     */
+    @Test
+    public void testObtener() {
+        System.out.println("obtener");
+        boolean withDetails = true;
+        int expected = 3;
+        List<Categoria> result = ManejadorCategorias.obtener(withDetails);
+        assertEquals(expected, result.size());
+    }
+    
+    /**
+     * Test of actualizar method, of class ManejadorCategorias.
+     */
+    @Test
+    public void testActualizar() {
+        System.out.println("actualizar");
+        Categoria categoria = new Categoria(3, "Postres");
+        ManejadorCategorias.actualizar(categoria);
+        
+        List<Categoria> expected = ManejadorCategorias.obtener(true);
+        assertEquals(expected.get(2).getNombre(), categoria.getNombre());
+    }
+
 
     /**
      * Test of insertar method, of class ManejadorCategorias.
@@ -74,9 +84,10 @@ public class ManejadorCategoriasTest {
         System.out.println("insertar");
         Categoria categoria = new Categoria(4, "Categoria 2");
         ManejadorCategorias.insertar(categoria);
-//        assertEquals(categoria.getIdCategoria(),);
-        // TODO review the generated test code and remove the default call to fail.
-        //fail("The test case is a prototype.");
+        
+        List<Categoria> expected = ManejadorCategorias.obtener(true);
+        assertEquals(expected.get(3).getIdCategoria(),categoria.getIdCategoria());
+        assertEquals(expected.get(3).getNombre(),categoria.getNombre());
     }
 
     /**
@@ -85,39 +96,12 @@ public class ManejadorCategoriasTest {
     @Test
     public void testEliminar() {
         System.out.println("eliminar");
+        int expected = 3;
         Categoria categoria = new Categoria(4, "Categoria 2");
         ManejadorCategorias.eliminar(categoria);
-        //assertEquals(categoria, this);
-        // TODO review the generated test code and remove the default call to fail.
-        //fail("The test case is a prototype.");
+        
+        List<Categoria> result = ManejadorCategorias.obtener(true);
+        assertEquals(expected, result.size());
     }
-    
-    /**
-     * Test of obtener method, of class ManejadorCategorias.
-     */
-    @Test
-    public void testObtener() {
-        System.out.println("obtener");
-        boolean withDetails = true;
-        List<Categoria> expResult = null;
-        List<Categoria> result = ManejadorCategorias.obtener(withDetails);
-        System.out.println(result);
-        //assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        //fail("The test case is a prototype.");
-    }
-
-//    /**
-//     * Test of getEM method, of class ManejadorCategorias.
-//     */
-//    @Test
-//    public void testGetEM() {
-//        System.out.println("getEM");
-//        EntityManager expResult = null;
-//        EntityManager result = ManejadorCategorias.getEM();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        //fail("The test case is a prototype.");
-//    }
     
 }
