@@ -5,7 +5,6 @@
  */
 package sv.edu.uesocc.disenio2018.resbar.backend.controller;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -29,7 +28,7 @@ public class ManejadorOrdenes {
         return Persistence.createEntityManagerFactory("ResbarBackendPU").createEntityManager();
     }
 
-    public static List<Orden> ObtenerActivas() {
+    public static List<Orden> obtenerActivas() {
         EntityManager eml = getEM();
         try {
             Query q = eml.createNamedQuery("Orden.findByEstado");
@@ -37,6 +36,21 @@ public class ManejadorOrdenes {
             return q.getResultList();
         } catch (Exception e) {
             throw new ErrorApplication("Error al obtener ordenes activas --> $ManejadorOrden.obtenerActivas() \n" + e.getMessage());
+        } finally {
+            if (eml.isOpen()) {
+                eml.close();
+            }
+        }
+    }
+    
+    public static Orden obtener(int id){
+        EntityManager eml = getEM();
+        try {
+            Query q = eml.createNamedQuery("Orden.findByIdOrden");
+            q.setParameter("idOrden", id);
+            return (Orden) q.getSingleResult();
+        } catch (Exception e) {
+            throw new ErrorApplication("Error al obtener orden con id "+id+" --> $ManejadorOrden.obtenerVentas()");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
