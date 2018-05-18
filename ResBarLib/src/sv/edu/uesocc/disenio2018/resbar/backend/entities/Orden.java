@@ -44,7 +44,7 @@ import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorAppli
 
   , @NamedQuery(name = "Orden.maxId", query = "SELECT MAX(o.idOrden) FROM Orden o")
   , @NamedQuery(name = "Orden.obtenerVentas", query = "SELECT o FROM Orden o WHERE (o.fecha BETWEEN :inicio AND :fin) AND o.estado = false")
-  , @NamedQuery(name = "Orden.findByParametro", query = "SELECT DISTINCT o FROM Orden o WHERE (UPPER(o.mesero) LIKE UPPER(:parametro) OR UPPER(o.mesa) LIKE UPPER(:parametro) OR UPPER(o.cliente) LIKE UPPER(:parametro) OR UPPER(o.comentario) LIKE UPPER(:parametro)) AND o.estado = true")
+  , @NamedQuery(name = "Orden.findByParametro", query = "SELECT DISTINCT o FROM Orden o WHERE (UPPER(o.mesero) LIKE CONCAT('%',UPPER(:parametro),'%') OR UPPER(o.mesa) LIKE CONCAT('%',UPPER(:parametro),'%') OR UPPER(o.cliente) LIKE CONCAT('%',UPPER(:parametro),'%') OR UPPER(o.comentario) LIKE CONCAT('%',UPPER(:parametro),'%')) AND o.estado = true")
 
     , @NamedQuery(name = "Orden.calcularTotal", query = "SELECT p.precio*do.cantidad FROM DetalleOrden do INNER JOIN do.producto p WHERE do.orden.idOrden = :idOrden ")
     , @NamedQuery(name = "Orden.updateDetalleOrden", query = "UPDATE DetalleOrden do SET do.cantidad = :cantidad WHERE do.orden.idOrden = :idOrden AND do.producto.idProducto = :idProducto")
