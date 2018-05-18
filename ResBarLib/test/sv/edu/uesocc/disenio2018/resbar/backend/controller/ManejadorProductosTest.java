@@ -55,11 +55,6 @@ public class ManejadorProductosTest {
     }
 
     /**
-     * Test of getEM method, of class ManejadorProductos.
-     */
-   
-
-    /**
      * Test of insertar method, of class ManejadorProductos.
      */
     @Test

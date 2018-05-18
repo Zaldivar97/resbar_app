@@ -33,7 +33,7 @@ public class ManejadorProductos {
         if (entity.getNombre().isEmpty()) {
             throw new ErrorApplication("El nombre del producto no puede estar vacío --> $ManejadorProducto.insertar()");
         }
-        if(entity.getArea()!='B'&&entity.getArea()!='C'){
+        if (entity.getArea() != 'B' && entity.getArea() != 'C') {
             throw new ErrorApplication("El area del producto solamente puede ser del tipo C o B --> $ManejadorProducto.insertar()");
         }
         EntityManager eml = getEM();
@@ -90,7 +90,7 @@ public class ManejadorProductos {
         if (entity.getNombre().isEmpty()) {
             throw new ErrorApplication("El nombre del producto no puede estar vacío --> $ManejadorProducto.insertar()");
         }
-        if(entity.getArea()!='B'&&entity.getArea()!='C'){
+        if (entity.getArea() != 'B' && entity.getArea() != 'C') {
             throw new ErrorApplication("El area del producto solamente puede ser del tipo C o B --> $ManejadorProducto.insertar()");
         }
         EntityManager eml = getEM();
@@ -116,7 +116,6 @@ public class ManejadorProductos {
 
     }
 
-//  
     public static Producto obtener(Integer id) {
         EntityManager eml = getEM();
         try {
@@ -184,28 +183,3 @@ public class ManejadorProductos {
     }
 
 }
-//  protected static List<Object> findEntities() {
-//        return findEntities(true, -1, -1);
-//    }
-//
-//    protected static List<Object> findEntities(int maxResults, int firstResult) {
-//        return findEntities(false, maxResults, firstResult);
-//    }
-//
-//    private static List<Object> findEntities(boolean all, int maxResults, int firstResult) {
-//        EntityManager eml = getEM();
-//        try {
-//            CriteriaQuery cq = eml.getCriteriaBuilder().createQuery();
-//            cq.select(cq.from(Producto.class));
-//            Query q = eml.createQuery(cq);
-//            if (!all) {
-//                q.setMaxResults(maxResults);
-//                q.setFirstResult(firstResult);
-//            }
-//            return q.getResultList();
-//        } finally {
-//            if (eml.isOpen()) {
-//                eml.close();
-//            }
-//        }
-//    }
