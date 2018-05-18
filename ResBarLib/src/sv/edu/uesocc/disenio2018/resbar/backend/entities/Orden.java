@@ -13,14 +13,18 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorApplication;
 
 /**
  *
@@ -37,6 +41,9 @@ import javax.persistence.TemporalType;
     , @NamedQuery(name = "Orden.findByFecha", query = "SELECT o FROM Orden o WHERE o.fecha = :fecha")
     , @NamedQuery(name = "Orden.findByComentario", query = "SELECT o FROM Orden o WHERE o.comentario = :comentario")
     , @NamedQuery(name = "Orden.findByTotal", query = "SELECT o FROM Orden o WHERE o.total = :total")
+    , @NamedQuery(name = "Orden.calcularTotal", query = "SELECT p.precio*do.cantidad FROM DetalleOrden do INNER JOIN do.producto p WHERE do.orden.idOrden = :idOrden ")
+    , @NamedQuery(name = "Orden.updateDetalleOrden", query = "UPDATE DetalleOrden do SET do.cantidad = :cantidad WHERE do.orden.idOrden = :idOrden AND do.producto.idProducto = :idProducto")
+    , @NamedQuery(name = "Orden.deleteDetalleOrden", query = "DELETE FROM DetalleOrden do WHERE do.orden.idOrden = :idOrden AND do.producto.idProducto = :idProducto")
     , @NamedQuery(name = "Orden.findByEstado", query = "SELECT o FROM Orden o WHERE o.estado = :estado")})
 public class Orden implements Serializable {
 
@@ -183,5 +190,74 @@ public class Orden implements Serializable {
     public String toString() {
         return "sv.edu.uesocc.disenio2018.resbar.backend.entities.Orden[ idOrden=" + idOrden + " ]";
     }
-    
+
+    //Metodos 
+    protected EntityManager getEM() {
+        return Persistence.createEntityManagerFactory("ResbarBackendPU").createEntityManager();
+    }
+
+    public void calcularTotal() {
+        EntityManager eml = getEM();
+        try {
+            Query q = eml.createNamedQuery("Orden.calcularTotal");
+            q.setParameter("idOrden", this.getIdOrden());
+            this.setTotal((BigDecimal) (q.getSingleResult()));
+
+        } catch (Exception ex) {
+            throw new ErrorApplication("Error al calcular el total de la orden --> $Orden.calcularTotal()");
+        } finally {
+            if (eml.isOpen()) {
+                eml.close();
+            }
+        }
+    }
+
+    /////////////////////REVISAR ESTE METODO//////////////////////////////////////////////////
+    public void agregarProducto(Producto producto, double cantidad) {
+        EntityManager eml = getEM();
+        try {
+            DetalleOrden detalleOrden = new DetalleOrden();
+            detalleOrden.setOrden(this);
+            detalleOrden.setProducto(producto);
+            detalleOrden.setCantidad((BigDecimal.valueOf(cantidad))); //Revisar esto
+
+//            Query q = eml.createNamedQuery("Orden.");
+//            q.setParameter("idOrden", this.idOrden);
+        } catch (Exception ex) {
+            throw new ErrorApplication("Error al agregar productos a la orden --> $Orden.agregarProductos()");
+        } finally {
+            if (eml.isOpen()) {
+                eml.close();
+            }
+        }
+
+    }
+
+    public void eliminarProducto(Producto producto, double cantidad) {
+        EntityManager eml = getEM();
+        try {
+
+            if (cantidad > 0) {
+                Query q = eml.createNamedQuery("Orden.updateDetalleOrden");
+                q.setParameter("idOrden", this.getIdOrden());
+                q.setParameter("idProducto", producto.getIdProducto());
+                q.setParameter("cantidad", cantidad);
+
+            } else if (cantidad == 0) {
+                Query q = eml.createNamedQuery("Orden.deleteDetalleOrden");
+                q.setParameter("idOrden", this.getIdOrden());
+                q.setParameter("idProducto", producto.getIdProducto());
+
+            }
+
+        } catch (Exception ex) {
+            throw new ErrorApplication("Error al eliminar productos de la orden --> $Orden.eliminarProductos()");
+        } finally {
+            if (eml.isOpen()) {
+                eml.close();
+            }
+        }
+
+    }
+
 }

@@ -39,7 +39,7 @@ public class ManejadorCategorias {
             if (et.isActive()) {
                 et.rollback();
             }
-            throw new ErrorApplication("Fallo al crear la categoria --> $ManejadorCategorias.insertar() --> " + ex.getMessage());
+            throw new ErrorApplication("Fallo al crear la categoria --> $ManejadorCategorias.insertar()");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -61,7 +61,7 @@ public class ManejadorCategorias {
             if (trans.isActive()) {
                 trans.rollback();
             }
-            throw new ErrorApplication("Fallo eliminar la categoria --> $ManejadorCategorias.eliminar() --> " + ex.getMessage());
+            throw new ErrorApplication("Fallo eliminar la categoria --> $ManejadorCategorias.eliminar()");
         } finally {
             eml.close();
         }
@@ -80,7 +80,7 @@ public class ManejadorCategorias {
             if (et.isActive()) {
                 et.rollback();
             }
-            throw new ErrorApplication("Fallo actualizar la categoria --> $ManejadorCategorias.actualizar() --> " + ex.getMessage());
+            throw new ErrorApplication("Fallo actualizar la categoria --> $ManejadorCategorias.actualizar()");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -98,14 +98,13 @@ public class ManejadorCategorias {
             Query q = eml.createQuery(cq);
             return ((int) q.getSingleResult()) + 1;
         } catch (Exception ex) {
-            throw new ErrorApplication("Fallo obtenerID para la nueva categoria --> $ManejadorCategorias.obtenerID() --> " + ex.getMessage());
+            throw new ErrorApplication("Fallo obtener ID para la nueva categoria --> $ManejadorCategorias.obtenerID()");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
             }
         }
     }
-
 
     protected static List<Categoria> obtener(boolean withDetails) {
         EntityManager eml = getEM();
@@ -114,7 +113,7 @@ public class ManejadorCategorias {
                 Query query = eml.createNamedQuery("Categoria.findAll");
                 return query.getResultList();
             } catch (Exception ex) {
-                throw new ErrorApplication("Fallo obtener lista de categorias --> $ManejadorCategorias.obtener() --> " + ex.getMessage());
+                throw new ErrorApplication("Fallo obtener lista de categorias --> $ManejadorCategorias.obtener()");
             } finally {
                 if (eml.isOpen()) {
                     eml.close();
@@ -125,7 +124,7 @@ public class ManejadorCategorias {
                 Query query = eml.createNamedQuery("Categoria.findAllWithoutDetails");
                 return query.getResultList();
             } catch (Exception ex) {
-                throw new ErrorApplication("Fallo obtener lista de categorias sin detalles --> $ManejadorCategorias.obtener() --> " + ex.getMessage());
+                throw new ErrorApplication("Fallo obtener lista de categorias sin detalles --> $ManejadorCategorias.obtener()");
             } finally {
                 if (eml.isOpen()) {
                     eml.close();
