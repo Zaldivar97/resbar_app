@@ -21,11 +21,11 @@ import sv.edu.uesocc.disenio2018.resbar.backend.entities.Categoria;
  */
 public class ManejadorCategorias {
 
-    protected static EntityManager getEM() {
+    private static EntityManager getEM() {
         return Persistence.createEntityManagerFactory("ResbarBackendPU").createEntityManager();
     }
 
-    protected static void insertar(Categoria categoria) {
+    public static void insertar(Categoria categoria) {
 
         EntityManager eml = getEM();
         EntityTransaction et = eml.getTransaction();
@@ -48,7 +48,7 @@ public class ManejadorCategorias {
         }
     }
 
-    protected static void eliminar(Categoria categoria) {
+    public static void eliminar(Categoria categoria) {
         EntityManager eml = getEM();
         EntityTransaction trans = eml.getTransaction();
         try {
@@ -67,7 +67,7 @@ public class ManejadorCategorias {
         }
     }
 
-    protected static void actualizar(Categoria categoria) {
+    public static void actualizar(Categoria categoria) {
         EntityManager eml = getEM();
         EntityTransaction et = eml.getTransaction();
         try {
@@ -89,7 +89,7 @@ public class ManejadorCategorias {
         }
     }
 
-    protected static int obtenerID() {
+    public static int obtenerID() {
         EntityManager eml = getEM();
         try {
             CriteriaQuery cq = eml.getCriteriaBuilder().createQuery(Integer.class);
@@ -105,10 +105,20 @@ public class ManejadorCategorias {
             }
         }
     }
-
-    protected static List<Categoria> obtener(boolean withDetails) {
+    
+    public static Categoria obtener(int id){
         EntityManager eml = getEM();
-        if (withDetails == true) {
+        try {
+            return eml.find(Categoria.class, id);
+            
+        } catch (Exception e) {
+            throw new ErrorApplication("Fallo obtener categoría con id: "+id+" --> $ManejadorCategorias.obtenerID()");
+        }
+    }
+
+    public static List<Categoria> obtener(boolean withDetails) {
+        EntityManager eml = getEM();
+        if (withDetails) {
             try {
                 Query query = eml.createNamedQuery("Categoria.findAll");
                 return query.getResultList();
@@ -119,7 +129,7 @@ public class ManejadorCategorias {
                     eml.close();
                 }
             }
-        } else if (withDetails == false) {
+        } else{
             try {
                 Query query = eml.createNamedQuery("Categoria.findAllWithoutDetails");
                 return query.getResultList();
@@ -130,9 +140,7 @@ public class ManejadorCategorias {
                     eml.close();
                 }
             }
-        } else {
-            throw new ErrorApplication("Fallo obtener lista de categorias --> $ManejadorCategorias.obtener()");
-        }
+        } 
     }
 
 }

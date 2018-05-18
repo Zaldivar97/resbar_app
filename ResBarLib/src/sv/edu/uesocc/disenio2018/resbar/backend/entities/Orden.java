@@ -14,6 +14,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
@@ -42,9 +43,9 @@ import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorAppli
     , @NamedQuery(name = "Orden.findByComentario", query = "SELECT o FROM Orden o WHERE o.comentario = :comentario")
     , @NamedQuery(name = "Orden.findByTotal", query = "SELECT o FROM Orden o WHERE o.total = :total")
 
-  , @NamedQuery(name = "Orden.maxId", query = "SELECT MAX(o.idOrden) FROM Orden o")
-  , @NamedQuery(name = "Orden.obtenerVentas", query = "SELECT o FROM Orden o WHERE (o.fecha BETWEEN :inicio AND :fin) AND o.estado = false")
-  , @NamedQuery(name = "Orden.findByParametro", query = "SELECT DISTINCT o FROM Orden o WHERE (UPPER(o.mesero) LIKE CONCAT('%',UPPER(:parametro),'%') OR UPPER(o.mesa) LIKE CONCAT('%',UPPER(:parametro),'%') OR UPPER(o.cliente) LIKE CONCAT('%',UPPER(:parametro),'%') OR UPPER(o.comentario) LIKE CONCAT('%',UPPER(:parametro),'%')) AND o.estado = true")
+    , @NamedQuery(name = "Orden.maxId", query = "SELECT MAX(o.idOrden) FROM Orden o")
+    , @NamedQuery(name = "Orden.obtenerVentas", query = "SELECT o FROM Orden o WHERE (o.fecha BETWEEN :inicio AND :fin) AND o.estado = false")
+    , @NamedQuery(name = "Orden.findByParametro", query = "SELECT DISTINCT o FROM Orden o WHERE (UPPER(o.mesero) LIKE CONCAT('%',UPPER(:parametro),'%') OR UPPER(o.mesa) LIKE CONCAT('%',UPPER(:parametro),'%') OR UPPER(o.cliente) LIKE CONCAT('%',UPPER(:parametro),'%') OR UPPER(o.comentario) LIKE CONCAT('%',UPPER(:parametro),'%')) AND o.estado = true")
 
     , @NamedQuery(name = "Orden.calcularTotal", query = "SELECT p.precio*do.cantidad FROM DetalleOrden do INNER JOIN do.producto p WHERE do.orden.idOrden = :idOrden ")
     , @NamedQuery(name = "Orden.updateDetalleOrden", query = "UPDATE DetalleOrden do SET do.cantidad = :cantidad WHERE do.orden.idOrden = :idOrden AND do.producto.idProducto = :idProducto")
@@ -217,28 +218,36 @@ public class Orden implements Serializable {
         }
     }
 
-    /////////////////////REVISAR ESTE METODO//////////////////////////////////////////////////
     public void agregarProducto(Producto producto, double cantidad) {
         EntityManager eml = getEM();
+        DetalleOrden detalleOrden = new DetalleOrden(new DetalleOrdenPK(this.getIdOrden(), producto.getIdProducto()), new BigDecimal(cantidad));
+        
+        this.getDetalleOrdenList().add(detalleOrden);
+        
+        EntityTransaction et = eml.getTransaction();
         try {
-            DetalleOrden detalleOrden = new DetalleOrden();
-            detalleOrden.setOrden(this);
-            detalleOrden.setProducto(producto);
-            detalleOrden.setCantidad((BigDecimal.valueOf(cantidad))); //Revisar esto
-
-//            Query q = eml.createNamedQuery("Orden.");
-//            q.setParameter("idOrden", this.idOrden);
+            if (!et.isActive()) {
+                et.begin();
+            }
+            eml.merge(this);
+            et.commit();
+            this.calcularTotal();
         } catch (Exception ex) {
-            throw new ErrorApplication("Error al agregar productos a la orden --> $Orden.agregarProductos()");
+            if (et.isActive()) {
+                et.rollback();
+            }
+            throw new ErrorApplication("Algo fallo intentando insertar un nuevo OrdenDetalle --> $ManejadorOrden.insertar() ---> " + ex.getMessage());
         } finally {
             if (eml.isOpen()) {
                 eml.close();
             }
+
         }
+    
 
-    }
+}
 
-    public void eliminarProducto(Producto producto, double cantidad) {
+public void eliminarProducto(Producto producto, double cantidad) {
         EntityManager eml = getEM();
         try {
 

@@ -15,12 +15,17 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
 import sv.edu.uesocc.disenio2018.resbar.backend.controller.ManejadorOrdenes;
+import sv.edu.uesocc.disenio2018.resbar.backend.controller.ManejadorProductos;
 
 /**
  *
  * @author danm
  */
+
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OrdenTest {
     
     public OrdenTest() {
@@ -63,28 +68,34 @@ public class OrdenTest {
     /**
      * Test of agregarProducto method, of class Orden.
      */
-    @Test
-    public void testAgregarProducto() {
-        System.out.println("agregarProducto");
-        Producto producto = null;
-        double cantidad = 2;
-        Orden instance = new Orden();
-        instance.agregarProducto(producto, cantidad);
-        
-    }
+//    @Test
+//    public void xtestAgregarProducto() {
+//        System.out.println("agregarProducto");
+//        Producto producto = ManejadorProductos.obtener(2);
+//        double cantidad = 2;
+//        
+//        Orden instance = ManejadorOrdenes.obtener(2);
+//        instance.agregarProducto(producto, cantidad);
+//        
+//        assertEquals(2, instance.getDetalleOrdenList().size());
+//        
+//    }
 
     /**
      * Test of eliminarProducto method, of class Orden.
      */
-    @Test
-    public void testEliminarProducto() {
-        System.out.println("eliminarProducto");
-        Producto producto = null;
-        double cantidad = 0.0;
-        Orden instance = new Orden();
-        instance.eliminarProducto(producto, cantidad);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-    
+//    @Test
+//    public void ytestEliminarProducto() {
+//        System.out.println("eliminarProducto");
+//        Producto producto = ManejadorProductos.obtener(2);
+//        double cantidad = 2;
+//        
+//        Orden instance = ManejadorOrdenes.obtener(2);
+//        instance.eliminarProducto(producto, cantidad);
+//        
+//        assertEquals(1, ManejadorOrdenes.obtener(2).getDetalleOrdenList().size());
+//        
+//        
+//    }
+//    
 }

@@ -20,7 +20,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.FixMethodOrder;
-import org.junit.internal.runners.statements.ExpectException;
 import org.junit.runners.MethodSorters;
 import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorApplication;
 import sv.edu.uesocc.disenio2018.resbar.backend.entities.DetalleOrden;

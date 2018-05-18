@@ -107,7 +107,7 @@ public class ManejadorOrdenes {
             if (trans.isActive()) {
                 trans.rollback();
             }
-            throw new ErrorApplication("Error al eliminar orden  --> $ManejadorOrden.eliminar() ---> ");
+            throw new ErrorApplication("Error al eliminar orden  --> $ManejadorOrden.eliminar()");
 
         } finally {
 
@@ -170,7 +170,7 @@ public class ManejadorOrdenes {
             q.setParameter("parametro", parametro);
             return q.getResultList();
         } catch (Exception e) {
-            throw new ErrorApplication("Algo fallo intentando buscar ordenes activas --> $ManejadorOrden.buscarActivas(String parametro) ---> " + e.getMessage());
+            throw new ErrorApplication("Algo fallo intentando buscar ordenes activas --> $ManejadorOrden.buscarActivas(String parametro)");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -199,17 +199,3 @@ public class ManejadorOrdenes {
     }
 }
 
-//  
-//    protected static Object obtener(Integer id) {
-//        EntityManager eml = getEM();
-//        try {
-//            return eml.find(Orden.class, id);
-//        } catch (Exception e) {
-//            return null;
-//        } finally {
-//            if (eml.isOpen()) {
-//                eml.close();
-//            }
-//
-//        }
-//    }

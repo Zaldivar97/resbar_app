@@ -19,11 +19,11 @@ import sv.edu.uesocc.disenio2018.resbar.backend.entities.Parametro;
  */
 public class ManejadorParametros {
 
-    protected static EntityManager getEM() {
+    private static EntityManager getEM() {
         return Persistence.createEntityManagerFactory("ResbarBackendPU").createEntityManager();
     }
 
-    protected static void actualizar(Parametro entityObject) {
+    public static void actualizar(Parametro entityObject) {
         EntityManager eml = getEM();
         EntityTransaction et = eml.getTransaction();
         try {
@@ -46,7 +46,7 @@ public class ManejadorParametros {
     }
 
     //Revisar el return
-    protected static Parametro obtener(Integer id) {
+    public static Parametro obtener(Integer id) {
         EntityManager eml = getEM();
         try {
             return eml.find(Parametro.class, id);
@@ -60,7 +60,7 @@ public class ManejadorParametros {
         }
     }
 
-    protected static List<Parametro> obtener() {
+    public static List<Parametro> obtener() {
         EntityManager eml = getEM();
         try {
             Query query = eml.createNamedQuery("Parametro.findAll");
