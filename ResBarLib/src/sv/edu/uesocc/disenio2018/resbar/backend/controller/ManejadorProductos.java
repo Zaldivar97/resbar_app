@@ -5,7 +5,7 @@
  */
 package sv.edu.uesocc.disenio2018.resbar.backend.controller;
 
-import java.util.Collections;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -20,14 +20,22 @@ import sv.edu.uesocc.disenio2018.resbar.backend.entities.Producto;
  *
  * @author zaldivar
  */
-public class ManejadorProductos  {
-   
-    protected static EntityManager getEM() {
+public class ManejadorProductos {
+
+    private static EntityManager getEM() {
         return Persistence.createEntityManagerFactory("ResbarBackendPU").createEntityManager();
     }
 
-    protected static void insertar(Producto entity) {
-        
+    public static void insertar(Producto entity) {
+        if (entity.getIdProducto() <= 0 || entity.getPrecio().doubleValue() <= 0) {
+            throw new ErrorApplication("El ID y el precio deben ser mayor a cero --> $ManejadorProducto.insertar()");
+        }
+        if (entity.getNombre().isEmpty()) {
+            throw new ErrorApplication("El nombre del producto no puede estar vacío --> $ManejadorProducto.insertar()");
+        }
+        if(entity.getArea()!='B'&&entity.getArea()!='C'){
+            throw new ErrorApplication("El area del producto solamente puede ser del tipo C o B --> $ManejadorProducto.insertar()");
+        }
         EntityManager eml = getEM();
         EntityTransaction et = eml.getTransaction();
         try {
@@ -37,19 +45,20 @@ public class ManejadorProductos  {
             eml.persist(entity);
             et.commit();
         } catch (Exception ex) {
-              if (et.isActive()) {
+            if (et.isActive()) {
                 et.rollback();
             }
-            throw new ErrorApplication("Algo fallo intentando insertar un nuevo producto --> $ManejadorProducto.insertar() ---> "+ex.getMessage());       
+            throw new ErrorApplication("Algo fallo intentando insertar un nuevo producto --> $ManejadorProducto.insertar()");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
             }
 
         }
+
     }
 
-    protected static void eliminar(Producto entity) {
+    public static void eliminar(Producto entity) {
         EntityManager eml = getEM();
         EntityTransaction trans = eml.getTransaction();
         try {
@@ -59,49 +68,62 @@ public class ManejadorProductos  {
             eml.remove(eml.merge(entity));
 
             trans.commit();
-            
+
         } catch (Exception ex) {
             if (trans.isActive()) {
                 trans.rollback();
             }
-            
-           
-        } finally {
+            throw new ErrorApplication("Algo fallo intentando eliminar un producto --> $ManejadorProducto.eliminar()");
 
-            eml.close();
+        } finally {
+            if (eml.isOpen()) {
+                eml.close();
+            }
         }
     }
 
-    protected static void actualizar(Producto entityObject) {
+    public static void actualizar(Producto entity) {
+
+        if (entity.getIdProducto() <= 0 || entity.getPrecio().doubleValue() <= 0) {
+            throw new ErrorApplication("El ID y el precio deben ser mayor a cero --> $ManejadorProducto.insertar()");
+        }
+        if (entity.getNombre().isEmpty()) {
+            throw new ErrorApplication("El nombre del producto no puede estar vacío --> $ManejadorProducto.insertar()");
+        }
+        if(entity.getArea()!='B'&&entity.getArea()!='C'){
+            throw new ErrorApplication("El area del producto solamente puede ser del tipo C o B --> $ManejadorProducto.insertar()");
+        }
         EntityManager eml = getEM();
         EntityTransaction et = eml.getTransaction();
         try {
             if (!et.isActive()) {
                 et.begin();
             }
-            eml.merge(entityObject);
+            eml.merge(entity);
             et.commit();
         } catch (Exception ex) {
             if (et.isActive()) {
                 et.rollback();
             }
-            
+            throw new ErrorApplication("Algo fallo intentando actualizar un producto --> $ManejadorProducto.actualizar()");
+
         } finally {
             if (eml.isOpen()) {
                 eml.close();
             }
 
         }
+
     }
 
 //  
-
-    protected static Object obtener(Integer id) {
+    public static Producto obtener(Integer id) {
         EntityManager eml = getEM();
         try {
             return eml.find(Producto.class, id);
         } catch (Exception e) {
-            return null;
+            throw new ErrorApplication("Algo fallo intentando obtener un producto con id: " + id + " --> $ManejadorProducto.obtener()");
+
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -110,14 +132,17 @@ public class ManejadorProductos  {
         }
     }
 
-    protected static int obtenerID() {
+    public static int obtenerID() {
         EntityManager eml = getEM();
         try {
             CriteriaQuery cq = eml.getCriteriaBuilder().createQuery(Integer.class);
             Root producto = cq.from(Producto.class);
             cq.select(eml.getCriteriaBuilder().max(producto.get("idProducto")));
             Query q = eml.createQuery(cq);
-            return ((int)q.getSingleResult()) + 1;
+            return ((int) q.getSingleResult()) + 1;
+        } catch (Exception ex) {
+            throw new ErrorApplication("Algo fallo intentando obtener el ID del ultimo producto creado --> $ManejadorProducto.obtenerID()");
+
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -132,8 +157,9 @@ public class ManejadorProductos  {
             Query query = eml.createNamedQuery("Producto.findByCategoria");
             query.setParameter("categoria", id);
             return query.getResultList();
-        } catch (Exception e) {
-            return Collections.EMPTY_LIST;
+        } catch (Exception ex) {
+            throw new ErrorApplication("Algo fallo intentando obtener producto con ID categoria: " + id + " --> $ManejadorProducto.obtenerxCategoria()");
+
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -148,17 +174,14 @@ public class ManejadorProductos  {
             query.setParameter("nombre", charSequence);
             return query.getResultList();
         } catch (Exception e) {
-            return Collections.EMPTY_LIST;
+            throw new ErrorApplication("Algo fallo intentando obtener producto --> $ManejadorProducto.bucar()");
+
         } finally {
             if (eml.isOpen()) {
                 eml.close();
             }
         }
     }
-
-
-    
-    
 
 }
 //  protected static List<Object> findEntities() {
