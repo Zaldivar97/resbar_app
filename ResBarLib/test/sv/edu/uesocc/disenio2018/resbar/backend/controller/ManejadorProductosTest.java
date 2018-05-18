@@ -20,9 +20,9 @@ import sv.edu.uesocc.disenio2018.resbar.backend.entities.Producto;
  *
  * @author zaldivar
  */
-public class ManejadorProductoTest {
+public class ManejadorProductosTest {
 
-    public ManejadorProductoTest() {
+    public ManejadorProductosTest() {
     }
 
     @BeforeClass
