@@ -8,8 +8,9 @@
             <file>file:/home/zaldivar/ues/Diseñosistemas/resbar/ResbarBackend/src/sv/edu/uesocc/disenio2018/resbar/backend/controller/DBUtil.java</file>
             <file>file:/home/zaldivar/ues/Diseñosistemas/resbar/ResbarBackend/src/META-INF/persistence.xml</file>
             <file>file:/home/zaldivar/ues/Diseñosistemas/resbar/ResbarBackend/test/sv/edu/uesocc/disenio2018/resbar/backend/controller/ManejadorProductoTest.java</file>
-            <file>file:/home/zaldivar/ues/Diseñosistemas/resbar/ResbarBackend/src/sv/edu/uesocc/disenio2018/resbar/backend/controller/Controller.java</file>
             <file>file:/home/zaldivar/ues/Diseñosistemas/resbar/ResbarBackend/src/sv/edu/uesocc/disenio2018/resbar/backend/controller/ManejadorCategoria.java</file>
+            <file>file:/home/zaldivar/ues/Diseñosistemas/resbar/ResbarBackend/src/sv/edu/uesocc/disenio2018/resbar/backend/controller/ManejadorOrden.java</file>
+            <file>file:/home/zaldivar/ues/Diseñosistemas/resbar/ResbarBackend/src/sv/edu/uesocc/disenio2018/resbar/backend/controller/exceptions/ErrorApplication.java</file>
         </group>
     </open-files>
 </project-private>
