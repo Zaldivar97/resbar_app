@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>src/sv/edu/uesocc/disenio2018/resbar/backend/entities/Orden.java</url>
+            <bookmark id="1">
+                <name/>
+                <line>43</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+<<<<<<< HEAD
+            <file>file:/media/danm/Archivos/Mega/ciclo-1-2018/diseño/resbar_app/ResBarLib/src/sv/edu/uesocc/disenio2018/resbar/backend/controller/ManejadorOrdenes.java</file>
+            <file>file:/media/danm/Archivos/Mega/ciclo-1-2018/diseño/resbar_app/ResBarLib/src/sv/edu/uesocc/disenio2018/resbar/backend/entities/Orden.java</file>
+            <file>file:/media/danm/Archivos/Mega/ciclo-1-2018/diseño/resbar_app/ResBarLib/src/sv/edu/uesocc/disenio2018/resbar/backend/controller/ManejadorProductos.java</file>
+=======
+            <file>file:/home/irvin/ArchivosMicro/DSI135/resbar_app/ResBarLib/src/sv/edu/uesocc/disenio2018/resbar/backend/entities/DetalleOrden.java</file>
+            <file>file:/home/irvin/ArchivosMicro/DSI135/resbar_app/ResBarLib/src/sv/edu/uesocc/disenio2018/resbar/backend/entities/Orden.java</file>
+            <file>file:/home/irvin/ArchivosMicro/DSI135/resbar_app/ResBarLib/src/sv/edu/uesocc/disenio2018/resbar/backend/controller/ManejadorParametros.java</file>
+            <file>file:/home/irvin/ArchivosMicro/DSI135/resbar_app/ResBarLib/src/sv/edu/uesocc/disenio2018/resbar/backend/entities/Parametro.java</file>
+            <file>file:/home/irvin/ArchivosMicro/DSI135/resbar_app/ResBarLib/src/sv/edu/uesocc/disenio2018/resbar/backend/controller/ManejadorCategorias.java</file>
+>>>>>>> f632803aad4008de0faf07edc73f5b4dfac1067c
+        </group>
+    </open-files>
+</project-private>
