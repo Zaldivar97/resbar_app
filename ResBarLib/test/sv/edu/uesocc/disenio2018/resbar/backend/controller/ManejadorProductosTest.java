@@ -55,20 +55,20 @@ public class ManejadorProductosTest {
     }
 
     /**
-     * Test of insertar method, of class ManejadorProductos.
+     * Test of Insertar method, of class ManejadorProductos.
      */
-    @Test
-    public void testInsertar() {
-        System.out.println("insertar");
-        Producto producto = new Producto(ManejadorProductos.obtenerID(), "Insertado en una prueba!!!!", BigDecimal.ONE, 'B');
-        Categoria categoria = ManejadorCategorias.obtener(2);
-        producto.setIdCategoria(categoria);
-        ManejadorProductos.insertar(producto);
-
-        Producto expected = ManejadorProductos.obtener(producto.getIdProducto());
-        assertNotNull(expected);
-        assertEquals(producto.getIdProducto(), expected.getIdProducto());
-    }
+//    @Test
+//    public void testInsertar() {
+//        System.out.println("insertar");
+//        Producto producto = new Producto(ManejadorProductos.obtenerID(), "Insertado en una prueba!!!!", BigDecimal.ONE, 'B');
+//        Categoria categoria = ManejadorCategorias.obtener(2);
+//        producto.setIdCategoria(categoria);
+//        ManejadorProductos.insertar(producto);
+//
+//        Producto expected = ManejadorProductos.obtener(producto.getIdProducto());
+//        assertNotNull(expected);
+//        assertEquals(producto.getIdProducto(), expected.getIdProducto());
+//    }
 
     /**
      * Test of eliminar method, of class ManejadorProductos.

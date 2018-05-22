@@ -221,9 +221,9 @@ public class Orden implements Serializable {
     public void agregarProducto(Producto producto, double cantidad) {
         EntityManager eml = getEM();
         DetalleOrden detalleOrden = new DetalleOrden(new DetalleOrdenPK(this.getIdOrden(), producto.getIdProducto()), new BigDecimal(cantidad));
-        
+
         this.getDetalleOrdenList().add(detalleOrden);
-        
+
         EntityTransaction et = eml.getTransaction();
         try {
             if (!et.isActive()) {
@@ -236,18 +236,17 @@ public class Orden implements Serializable {
             if (et.isActive()) {
                 et.rollback();
             }
-            throw new ErrorApplication("Algo fallo intentando insertar un nuevo OrdenDetalle --> $ManejadorOrden.insertar() ---> " + ex.getMessage());
+            throw new ErrorApplication("Algo fallo intentando insertar un nuevo producto --> $Orden.AgregarProducto() ---> " + ex.getMessage());
         } finally {
             if (eml.isOpen()) {
                 eml.close();
             }
 
         }
-    
 
-}
+    }
 
-public void eliminarProducto(Producto producto, double cantidad) {
+    public void eliminarProducto(Producto producto, double cantidad) {
         EntityManager eml = getEM();
         try {
 

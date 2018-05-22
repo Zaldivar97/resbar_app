@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sv.edu.uesocc.disenio2018.resbar.backend.controller;
 
 import java.util.List;
@@ -25,30 +20,97 @@ public class ManejadorCategorias {
         return Persistence.createEntityManagerFactory("ResbarBackendPU").createEntityManager();
     }
 
-    public static void insertar(Categoria categoria) {
-
+//    public static Categoria Obtener(int id) {
+//        EntityManager eml = getEM();
+//        try {
+//            return eml.find(Categoria.class, id);
+//
+//        } catch (Exception e) {
+//            throw new ErrorApplication("Fallo Obtener categoría con id: " + id + " --> $ManejadorCategorias.ObtenerId()");
+//        }
+//    }
+//    
+    public static List<Categoria> Obtener(boolean withDetails) {
         EntityManager eml = getEM();
-        EntityTransaction et = eml.getTransaction();
-        try {
-            if (!et.isActive()) {
-                et.begin();
+        if (withDetails) {
+            try {
+                Query query = eml.createNamedQuery("Categoria.findAll");
+                return query.getResultList();
+            } catch (Exception ex) {
+                throw new ErrorApplication("Fallo obtener lista de categorias --> $ManejadorCategorias.Obtener()");
+            } finally {
+                if (eml.isOpen()) {
+                    eml.close();
+                }
             }
-            eml.persist(categoria);
-            et.commit();
-        } catch (Exception ex) {
-            if (et.isActive()) {
-                et.rollback();
+        } else {
+            try {
+                Query query = eml.createNamedQuery("Categoria.findAllWithoutDetails");
+                return query.getResultList();
+            } catch (Exception ex) {
+                throw new ErrorApplication("Fallo obtener lista de categorias sin detalles --> $ManejadorCategorias.Obtener()");
+            } finally {
+                if (eml.isOpen()) {
+                    eml.close();
+                }
             }
-            throw new ErrorApplication("Fallo al crear la categoria --> $ManejadorCategorias.insertar()");
-        } finally {
-            if (eml.isOpen()) {
-                eml.close();
-            }
-
         }
     }
 
-    public static void eliminar(Categoria categoria) {
+    public static void Actualizar(Categoria categoria) {
+        if (!categoria.nombre.isEmpty()) {
+            EntityManager eml = getEM();
+            EntityTransaction et = eml.getTransaction();
+            try {
+                if (!et.isActive()) {
+                    et.begin();
+                }
+                eml.merge(categoria);
+                et.commit();
+            } catch (Exception ex) {
+                if (et.isActive()) {
+                    et.rollback();
+                }
+                throw new ErrorApplication("Fallo actualizar la categoria --> $ManejadorCategorias.Actualizar()");
+            } finally {
+                if (eml.isOpen()) {
+                    eml.close();
+                }
+
+            }
+        } else {
+            throw new ErrorApplication("La categoria debe tener un nombre --> $ManejadorCategorias.Actualizar()");
+        }
+    }
+
+    public static void Insertar(Categoria categoria) {
+        if (!categoria.nombre.isEmpty()) {
+            EntityManager eml = getEM();
+            EntityTransaction et = eml.getTransaction();
+            try {
+                if (!et.isActive()) {
+                    et.begin();
+                }
+                eml.persist(categoria);
+                et.commit();
+            } catch (Exception ex) {
+                if (et.isActive()) {
+                    et.rollback();
+                }
+                throw new ErrorApplication("Fallo al crear la categoria --> $ManejadorCategorias.Insertar()");
+            } finally {
+                if (eml.isOpen()) {
+                    eml.close();
+                }
+
+            }
+        } else {
+            throw new ErrorApplication("La categoria debe tener un nombre --> $ManejadorCategorias.Insertar()");
+        }
+
+    }
+
+    public static void Eliminar(Categoria categoria) {
         EntityManager eml = getEM();
         EntityTransaction trans = eml.getTransaction();
         try {
@@ -67,29 +129,7 @@ public class ManejadorCategorias {
         }
     }
 
-    public static void actualizar(Categoria categoria) {
-        EntityManager eml = getEM();
-        EntityTransaction et = eml.getTransaction();
-        try {
-            if (!et.isActive()) {
-                et.begin();
-            }
-            eml.merge(categoria);
-            et.commit();
-        } catch (Exception ex) {
-            if (et.isActive()) {
-                et.rollback();
-            }
-            throw new ErrorApplication("Fallo actualizar la categoria --> $ManejadorCategorias.actualizar()");
-        } finally {
-            if (eml.isOpen()) {
-                eml.close();
-            }
-
-        }
-    }
-
-    public static int obtenerID() {
+    public static int ObtenerId() {
         EntityManager eml = getEM();
         try {
             CriteriaQuery cq = eml.getCriteriaBuilder().createQuery(Integer.class);
@@ -104,43 +144,6 @@ public class ManejadorCategorias {
                 eml.close();
             }
         }
-    }
-    
-    public static Categoria obtener(int id){
-        EntityManager eml = getEM();
-        try {
-            return eml.find(Categoria.class, id);
-            
-        } catch (Exception e) {
-            throw new ErrorApplication("Fallo obtener categoría con id: "+id+" --> $ManejadorCategorias.obtenerID()");
-        }
-    }
-
-    public static List<Categoria> obtener(boolean withDetails) {
-        EntityManager eml = getEM();
-        if (withDetails) {
-            try {
-                Query query = eml.createNamedQuery("Categoria.findAll");
-                return query.getResultList();
-            } catch (Exception ex) {
-                throw new ErrorApplication("Fallo obtener lista de categorias --> $ManejadorCategorias.obtener()");
-            } finally {
-                if (eml.isOpen()) {
-                    eml.close();
-                }
-            }
-        } else{
-            try {
-                Query query = eml.createNamedQuery("Categoria.findAllWithoutDetails");
-                return query.getResultList();
-            } catch (Exception ex) {
-                throw new ErrorApplication("Fallo obtener lista de categorias sin detalles --> $ManejadorCategorias.obtener()");
-            } finally {
-                if (eml.isOpen()) {
-                    eml.close();
-                }
-            }
-        } 
     }
 
 }

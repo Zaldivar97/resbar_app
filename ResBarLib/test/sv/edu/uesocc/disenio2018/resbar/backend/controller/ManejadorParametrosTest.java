@@ -13,6 +13,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
 import sv.edu.uesocc.disenio2018.resbar.backend.entities.Parametro;
 
 /**
@@ -20,25 +22,25 @@ import sv.edu.uesocc.disenio2018.resbar.backend.entities.Parametro;
  * @author irvin
  */
 public class ManejadorParametrosTest {
-    
+
     public ManejadorParametrosTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
-    }  
+    }
 
     /**
      * Test of actualizar method, of class ManejadorParametros.
@@ -46,14 +48,14 @@ public class ManejadorParametrosTest {
     @Test
     public void testActualizar() {
         System.out.println("actualizar");
-        Parametro parametro = new Parametro(1, "Empresa", "ABCD");
+        Parametro parametro = new Parametro(7, "email", "empresaabc@gmail.com");
         ManejadorParametros.actualizar(parametro);
-        
-        Parametro expected = ManejadorParametros.obtener(1);
+
+        Parametro expected = ManejadorParametros.obtener(7);
         assertEquals(expected.getNombre(), parametro.getNombre());
         assertEquals(expected.getValor(), parametro.getValor());
     }
-    
+
     /**
      * Test of obtener method, of class ManejadorParametros.
      */
@@ -73,7 +75,7 @@ public class ManejadorParametrosTest {
     @Test
     public void testObtener_0args() {
         System.out.println("obtener");
-        int expected= 7;
+        int expected = 7;
         List<Parametro> result = ManejadorParametros.obtener();
         assertEquals(expected, result.size());
     }
