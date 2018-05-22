@@ -80,7 +80,7 @@ public class Orden implements Serializable {
     @Basic(optional = false)
     @Column(name = "estado", nullable = false)
     private boolean estado;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orden", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orden", fetch = FetchType.LAZY)
     private List<DetalleOrden> detalleOrdenList;
 
     public Orden() {

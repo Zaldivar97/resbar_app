@@ -39,10 +39,10 @@ public class DetalleOrden implements Serializable {
     @Column(name = "cantidad", nullable = false, precision = 8, scale = 2)
     private BigDecimal cantidad;
     @JoinColumn(name = "idOrden", referencedColumnName = "idOrden", nullable = false, insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Orden orden;
     @JoinColumn(name = "idProducto", referencedColumnName = "idProducto", nullable = false, insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Producto producto;
 
     public DetalleOrden() {

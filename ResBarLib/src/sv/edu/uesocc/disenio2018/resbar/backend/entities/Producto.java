@@ -52,10 +52,10 @@ public class Producto implements Serializable {
     @Basic(optional = false)
     @Column(name = "area", nullable = false)
     private Character area;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "producto", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "producto", fetch = FetchType.LAZY)
     private List<DetalleOrden> detalleOrdenList;
     @JoinColumn(name = "idCategoria", referencedColumnName = "idCategoria", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Categoria idCategoria;
 
     public Producto() {
