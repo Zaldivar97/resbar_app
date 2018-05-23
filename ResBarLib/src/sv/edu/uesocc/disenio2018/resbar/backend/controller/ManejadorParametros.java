@@ -47,16 +47,20 @@ public class ManejadorParametros {
 
     //Revisar el return
     public static Parametro obtener(Integer id) {
-        EntityManager eml = getEM();
-        try {
-            return eml.find(Parametro.class, id);
-        } catch (Exception e) {
-            throw new ErrorApplication("Fallo obtener el parámetro --> $ManejadorPaŕametros.obtener()");
-        } finally {
-            if (eml.isOpen()) {
-                eml.close();
-            }
+        if (id > 0) {
+            EntityManager eml = getEM();
+            try {
+                return eml.find(Parametro.class, id);
+            } catch (Exception e) {
+                throw new ErrorApplication("ManejadorPaŕametros.obtener()$" + e.getMessage());
+            } finally {
+                if (eml.isOpen()) {
+                    eml.close();
+                }
 
+            }
+        }else{
+            throw new ErrorApplication("ManejadorPaŕametros.obtener()$ID invalido");
         }
     }
 
