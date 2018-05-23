@@ -61,7 +61,7 @@ public class ManejadorParametrosTest {
         Parametro expResult = new Parametro();
         expResult.idParametro = 1;
         expResult.nombre = "empresa";
-        expResult.valor = "ABC";
+        expResult.valor = "Tienda ABC";
         
         Parametro result = ManejadorParametros.Obtener(id);
         assertEquals(expResult.nombre, result.nombre);
