@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -99,7 +100,7 @@ public class Orden implements Serializable {
             this.total = (BigDecimal)q.getSingleResult();
 
         } catch (Exception ex) {
-            throw new ErrorApplication("Error al calcular el total de la orden --> $Orden.calcularTotal()");
+            throw new ErrorApplication("Error al calcular el total de la orden --> $Orden.calcularTotal()"+ex.getMessage());
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -107,11 +108,16 @@ public class Orden implements Serializable {
         }
     }
 
-    public void agregarProducto(Producto producto, double cantidad) {
+    public void agregarProducto(Producto producto, double cant) {
+        
+        if(cant<0){
+            throw new ErrorApplication("La cantidad debe ser mayor a cero --> $Orden.agregarProducto()");
+        }
+        
         EntityManager eml = getEM();
 
         DetalleOrden detalleOrden = new DetalleOrden();
-        detalleOrden.cantidad = new BigDecimal(cantidad);
+        detalleOrden.cantidad = new BigDecimal(cant);
 
         DetalleOrdenPK detalleOrdenPK = new DetalleOrdenPK();
         detalleOrdenPK.idOrden = this.idOrden;
@@ -119,7 +125,18 @@ public class Orden implements Serializable {
 
         detalleOrden.detalleOrdenPK = detalleOrdenPK;
 
-        this.detalle.add(detalleOrden);
+        boolean encontrado = false;
+        
+        for(DetalleOrden d : this.detalle){
+            if(Objects.equals(d.producto.idProducto, detalleOrden.producto.idProducto)){
+                encontrado = true;
+                d.cantidad.add(new BigDecimal(cant));
+            }
+        }
+        
+        if(!encontrado){
+            this.detalle.add(detalleOrden);
+        }
 
         EntityTransaction et = eml.getTransaction();
         try {
@@ -137,28 +154,30 @@ public class Orden implements Serializable {
         } finally {
             if (eml.isOpen()) {
                 eml.close();
+                this.calcularTotal();
             }
         }
     }
 
-    public void eliminarProducto(Producto producto, double cantidad) {
+    public void eliminarProducto(Producto producto, double cant) {
         EntityManager eml = getEM();
         try {
-            if (cantidad > 0) {
+            if (cant > 0) {
                 Query q = eml.createNamedQuery("Orden.updateDetalleOrden");
                 q.setParameter("idOrden", this.idOrden);
                 q.setParameter("idProducto", producto.idProducto);
-                q.setParameter("cantidad", cantidad);
-            } else if (cantidad == 0) {
+                q.setParameter("cantidad", cant);
+            } else if (cant == 0) {
                 Query q = eml.createNamedQuery("Orden.deleteDetalleOrden");
                 q.setParameter("idOrden", this.idOrden);
                 q.setParameter("idProducto", producto.idProducto);
             }
         } catch (Exception ex) {
-            throw new ErrorApplication("Error al eliminar productos de la orden --> $Orden.eliminarProductos()");
+            throw new ErrorApplication("Error al eliminar productos de la orden --> $Orden.eliminarProductos()"+ex.getMessage());
         } finally {
             if (eml.isOpen()) {
                 eml.close();
+                this.calcularTotal();
             }
         }
     }
