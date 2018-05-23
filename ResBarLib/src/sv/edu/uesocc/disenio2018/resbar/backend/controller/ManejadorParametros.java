@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sv.edu.uesocc.disenio2018.resbar.backend.controller;
 
 import java.util.List;
@@ -14,7 +9,6 @@ import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorAppli
 import sv.edu.uesocc.disenio2018.resbar.backend.entities.Parametro;
 
 /**
- *
  * @author zaldivar
  */
 public class ManejadorParametros {
@@ -23,7 +17,7 @@ public class ManejadorParametros {
         return Persistence.createEntityManagerFactory("ResbarBackendPU").createEntityManager();
     }
 
-    public static void actualizar(Parametro entityObject) {
+    public static void Actualizar(Parametro entityObject) {
         EntityManager eml = getEM();
         EntityTransaction et = eml.getTransaction();
         try {
@@ -46,7 +40,7 @@ public class ManejadorParametros {
     }
 
     //Revisar el return
-    public static Parametro obtener(Integer id) {
+    public static Parametro Obtener(Integer id) {
         if (id > 0) {
             EntityManager eml = getEM();
             try {
@@ -59,12 +53,12 @@ public class ManejadorParametros {
                 }
 
             }
-        }else{
+        } else {
             throw new ErrorApplication("ManejadorPaŕametros.obtener()$ID invalido");
         }
     }
 
-    public static List<Parametro> obtener() {
+    public static List<Parametro> Obtener() {
         EntityManager eml = getEM();
         try {
             Query query = eml.createNamedQuery("Parametro.findAll");

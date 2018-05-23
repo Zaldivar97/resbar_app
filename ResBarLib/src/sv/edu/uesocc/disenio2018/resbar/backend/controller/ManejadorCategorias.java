@@ -11,7 +11,6 @@ import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorAppli
 import sv.edu.uesocc.disenio2018.resbar.backend.entities.Categoria;
 
 /**
- *
  * @author irvin
  */
 public class ManejadorCategorias {
@@ -19,17 +18,7 @@ public class ManejadorCategorias {
     private static EntityManager getEM() {
         return Persistence.createEntityManagerFactory("ResbarBackendPU").createEntityManager();
     }
-
-//    public static Categoria Obtener(int id) {
-//        EntityManager eml = getEM();
-//        try {
-//            return eml.find(Categoria.class, id);
-//
-//        } catch (Exception e) {
-//            throw new ErrorApplication("Fallo Obtener categoría con id: " + id + " --> $ManejadorCategorias.ObtenerId()");
-//        }
-//    }
-//    
+   
     public static List<Categoria> Obtener(boolean withDetails) {
         EntityManager eml = getEM();
         if (withDetails) {

@@ -1,24 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sv.edu.uesocc.disenio2018.resbar.backend.controller;
 
 import java.util.List;
-import javax.persistence.EntityManager;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.FixMethodOrder;
-import org.junit.runners.MethodSorters;
 import sv.edu.uesocc.disenio2018.resbar.backend.entities.Parametro;
 
 /**
- *
  * @author irvin
  */
 public class ManejadorParametrosTest {
@@ -43,40 +34,48 @@ public class ManejadorParametrosTest {
     }
 
     /**
-     * Test of actualizar method, of class ManejadorParametros.
+     * Test of Actualizar method, of class ManejadorParametros.
      */
     @Test
     public void testActualizar() {
         System.out.println("actualizar");
-        Parametro parametro = new Parametro(7, "email", "empresaabc@gmail.com");
-        ManejadorParametros.actualizar(parametro);
+        Parametro parametro = new Parametro();
+        parametro.idParametro = 7;
+        parametro.nombre = "email";
+        parametro.valor = "empresaabc@gmail.com";
 
-        Parametro expected = ManejadorParametros.obtener(7);
-        assertEquals(expected.getNombre(), parametro.getNombre());
-        assertEquals(expected.getValor(), parametro.getValor());
+        ManejadorParametros.Actualizar(parametro);
+
+        Parametro expected = ManejadorParametros.Obtener(7);
+        assertEquals(expected.nombre, parametro.nombre);
+        assertEquals(expected.valor, parametro.valor);
     }
 
     /**
-     * Test of obtener method, of class ManejadorParametros.
+     * Test of Obtener method, of class ManejadorParametros.
      */
     @Test
     public void testObtener_Integer() {
         System.out.println("obtener");
         Integer id = 1;
-        Parametro expResult = new Parametro(1, "empresa", "ABC");
-        Parametro result = ManejadorParametros.obtener(id);
-        assertEquals(expResult.getNombre(), result.getNombre());
-        assertEquals(expResult.getValor(), result.getValor());
+        Parametro expResult = new Parametro();
+        expResult.idParametro = 1;
+        expResult.nombre = "empresa";
+        expResult.valor = "ABC";
+        
+        Parametro result = ManejadorParametros.Obtener(id);
+        assertEquals(expResult.nombre, result.nombre);
+        assertEquals(expResult.valor, result.valor);
     }
 
     /**
-     * Test of obtener method, of class ManejadorParametros.
+     * Test of Obtener method, of class ManejadorParametros.
      */
     @Test
     public void testObtener_0args() {
         System.out.println("obtener");
         int expected = 7;
-        List<Parametro> result = ManejadorParametros.obtener();
+        List<Parametro> result = ManejadorParametros.Obtener();
         assertEquals(expected, result.size());
     }
 }

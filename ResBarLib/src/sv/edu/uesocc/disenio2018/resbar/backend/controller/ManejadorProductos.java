@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sv.edu.uesocc.disenio2018.resbar.backend.controller;
 
-import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -17,7 +11,6 @@ import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorAppli
 import sv.edu.uesocc.disenio2018.resbar.backend.entities.Producto;
 
 /**
- *
  * @author zaldivar
  */
 public class ManejadorProductos {
@@ -26,14 +19,14 @@ public class ManejadorProductos {
         return Persistence.createEntityManagerFactory("ResbarBackendPU").createEntityManager();
     }
 
-    public static void insertar(Producto entity) {
-        if (entity.getIdProducto() <= 0 || entity.getPrecio().doubleValue() <= 0) {
+    public static void Insertar(Producto entity) {
+        if (entity.idProducto <= 0 || entity.precio <= 0) {
             throw new ErrorApplication("El ID y el precio deben ser mayor a cero --> $ManejadorProducto.insertar()");
         }
-        if (entity.getNombre().isEmpty()) {
+        if (entity.nombre.isEmpty()) {
             throw new ErrorApplication("El nombre del producto no puede estar vacío --> $ManejadorProducto.insertar()");
         }
-        if (entity.getArea() != 'B' && entity.getArea() != 'C') {
+        if (entity.area != 'B' && entity.area != 'C') {
             throw new ErrorApplication("El area del producto solamente puede ser del tipo C o B --> $ManejadorProducto.insertar()");
         }
         EntityManager eml = getEM();
@@ -53,12 +46,10 @@ public class ManejadorProductos {
             if (eml.isOpen()) {
                 eml.close();
             }
-
         }
-
     }
 
-    public static void eliminar(Producto entity) {
+    public static void Eliminar(Producto entity) {
         EntityManager eml = getEM();
         EntityTransaction trans = eml.getTransaction();
         try {
@@ -66,9 +57,7 @@ public class ManejadorProductos {
                 trans.begin();
             }
             eml.remove(eml.merge(entity));
-
             trans.commit();
-
         } catch (Exception ex) {
             if (trans.isActive()) {
                 trans.rollback();
@@ -82,15 +71,15 @@ public class ManejadorProductos {
         }
     }
 
-    public static void actualizar(Producto entity) {
+    public static void Actualizar(Producto entity) {
 
-        if (entity.getIdProducto() <= 0 || entity.getPrecio().doubleValue() <= 0) {
+        if (entity.idProducto <= 0 || entity.precio <= 0) {
             throw new ErrorApplication("El ID y el precio deben ser mayor a cero --> $ManejadorProducto.insertar()");
         }
-        if (entity.getNombre().isEmpty()) {
+        if (entity.nombre.isEmpty()) {
             throw new ErrorApplication("El nombre del producto no puede estar vacío --> $ManejadorProducto.insertar()");
         }
-        if (entity.getArea() != 'B' && entity.getArea() != 'C') {
+        if (entity.area != 'B' && entity.area != 'C') {
             throw new ErrorApplication("El area del producto solamente puede ser del tipo C o B --> $ManejadorProducto.insertar()");
         }
         EntityManager eml = getEM();
@@ -106,32 +95,27 @@ public class ManejadorProductos {
                 et.rollback();
             }
             throw new ErrorApplication("Algo fallo intentando actualizar un producto --> $ManejadorProducto.actualizar()");
-
         } finally {
             if (eml.isOpen()) {
                 eml.close();
             }
-
         }
-
     }
 
-    public static Producto obtener(Integer id) {
+    public static Producto Obtener(Integer id) {
         EntityManager eml = getEM();
         try {
             return eml.find(Producto.class, id);
         } catch (Exception e) {
             throw new ErrorApplication("Algo fallo intentando obtener un producto con id: " + id + " --> $ManejadorProducto.obtener()");
-
         } finally {
             if (eml.isOpen()) {
                 eml.close();
             }
-
         }
     }
 
-    public static int obtenerID() {
+    public static int ObtenerID() {
         EntityManager eml = getEM();
         try {
             CriteriaQuery cq = eml.getCriteriaBuilder().createQuery(Integer.class);
@@ -149,10 +133,9 @@ public class ManejadorProductos {
         }
     }
 
-    public static List<Producto> obtenerxCategoria(int id) {
+    public static List<Producto> ObtenerxCategoria(int id) {
         EntityManager eml = getEM();//entitymanagerlocal
         try {
-
             Query query = eml.createNamedQuery("Producto.findByCategoria");
             query.setParameter("categoria", id);
             return query.getResultList();

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sv.edu.uesocc.disenio2018.resbar.backend.controller;
 
 import java.util.Date;
@@ -16,10 +11,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorApplication;
 import sv.edu.uesocc.disenio2018.resbar.backend.entities.Orden;
-//import sv.edu.uesocc.disenio2018.resbar.backend.entities.Producto;
 
 /**
- *
  * @author zaldivar
  */
 public class ManejadorOrdenes {
@@ -28,7 +21,7 @@ public class ManejadorOrdenes {
         return Persistence.createEntityManagerFactory("ResbarBackendPU").createEntityManager();
     }
 
-    public static List<Orden> obtenerActivas() {
+    public static List<Orden> ObtenerActivas() {
         EntityManager eml = getEM();
         try {
             Query q = eml.createNamedQuery("Orden.findByEstado");
@@ -42,15 +35,15 @@ public class ManejadorOrdenes {
             }
         }
     }
-    
-    public static Orden obtener(int id){
+
+    public static Orden Obtener(int id) {
         EntityManager eml = getEM();
         try {
             Query q = eml.createNamedQuery("Orden.findByIdOrden");
             q.setParameter("idOrden", id);
             return (Orden) q.getSingleResult();
         } catch (Exception e) {
-            throw new ErrorApplication("Error al obtener orden con id "+id+" --> $ManejadorOrden.obtenerVentas()");
+            throw new ErrorApplication("Error al obtener orden con id " + id + " --> $ManejadorOrden.obtenerVentas()");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -58,10 +51,10 @@ public class ManejadorOrdenes {
         }
     }
 
-    public static void insertar(Orden orden) {
-        if (!orden.getMesero().isEmpty() || !orden.getMesa().isEmpty() || !orden.getCliente().isEmpty()) {
-            if (orden.getDetalleOrdenList() != null) {
-                if (orden.getDetalleOrdenList().size() > 0) {
+    public static void Insertar(Orden orden) {
+        if (!orden.mesero.isEmpty() || !orden.mesa.isEmpty() || !orden.cliente.isEmpty()) {
+            if (orden.detalle != null) {
+                if (orden.detalle.size() > 0) {
                     EntityManager eml = getEM();
                     EntityTransaction et = eml.getTransaction();
                     try {
@@ -92,7 +85,7 @@ public class ManejadorOrdenes {
         }
     }
 
-    public static void eliminar(Orden orden) {
+    public static void Eliminar(Orden orden) {
         EntityManager eml = getEM();
         EntityTransaction trans = eml.getTransaction();
         try {
@@ -115,10 +108,10 @@ public class ManejadorOrdenes {
         }
     }
 
-    public static void actualizar(Orden orden) {
+    public static void Actualizar(Orden orden) {
 
-        if (!orden.getMesero().isEmpty() || !orden.getMesa().isEmpty() || !orden.getCliente().isEmpty()) {
-            if (orden.getDetalleOrdenList() != null) {
+        if (!orden.mesero.isEmpty() || !orden.mesa.isEmpty() || !orden.cliente.isEmpty()) {
+            if (orden.detalle != null) {
 
                 EntityManager eml = getEM();
                 EntityTransaction et = eml.getTransaction();
@@ -146,7 +139,7 @@ public class ManejadorOrdenes {
         }
     }
 
-    public static int obtenerID() {
+    public static int ObtenerId() {
         EntityManager eml = getEM();
         try {
             CriteriaQuery cq = eml.getCriteriaBuilder().createQuery(Integer.class);
@@ -163,7 +156,7 @@ public class ManejadorOrdenes {
         }
     }
 
-    public static List<Orden> buscarActivas(String parametro) {
+    public static List<Orden> BuscarActivas(String parametro) {
         EntityManager eml = getEM();
         try {
             Query q = eml.createNamedQuery("Orden.findByParametro");
@@ -178,7 +171,7 @@ public class ManejadorOrdenes {
         }
     }
 
-    public static List<Orden> obtenerVentas(Date inicio, Date fin) {
+    public static List<Orden> ObtenerVentas(Date inicio, Date fin) {
         EntityManager eml = getEM();
         try {
             Query q = eml.createNamedQuery("Orden.obtenerVentas");
@@ -186,16 +179,15 @@ public class ManejadorOrdenes {
             q.setParameter("fin", fin, TemporalType.DATE);
             return q.getResultList();
         } catch (Exception e) {
-            throw new ErrorApplication("Error al obtenerVentas con fechas "+inicio+" - "+fin+" --> $ManejadorOrden.obtenerVentas()");
+            throw new ErrorApplication("Error al obtenerVentas con fechas " + inicio + " - " + fin + " --> $ManejadorOrden.obtenerVentas()");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
             }
         }
     }
-    
-    public static List<Orden> obtenerVentas(Date inicio){
-        return obtenerVentas(inicio, inicio);
+
+    public static List<Orden> ObtenerVentas(Date inicio) {
+        return ManejadorOrdenes.ObtenerVentas(inicio, inicio);
     }
 }
-

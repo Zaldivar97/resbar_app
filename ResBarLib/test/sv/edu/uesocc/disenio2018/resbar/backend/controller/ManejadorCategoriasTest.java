@@ -12,7 +12,6 @@ import org.junit.runners.MethodSorters;
 import sv.edu.uesocc.disenio2018.resbar.backend.entities.Categoria;
 
 /**
- *
  * @author irvin
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
