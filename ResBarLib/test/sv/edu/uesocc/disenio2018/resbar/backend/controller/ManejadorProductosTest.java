@@ -57,7 +57,7 @@ public class ManejadorProductosTest {
         Producto producto = new Producto();
         producto.idProducto = ManejadorProductos.ObtenerID();
         producto.nombre = "Insertado en una prueba!!!!";
-        producto.precio = 1;
+        producto.precio = BigDecimal.ONE;
         producto.area = 'B';
 
         Categoria categoria = new Categoria();
@@ -91,7 +91,7 @@ public class ManejadorProductosTest {
     public void testActualizar() {
         System.out.println("actualizar");
         Producto actualizado = ManejadorProductos.Obtener(4);
-        actualizado.precio = 10;
+        actualizado.precio = BigDecimal.TEN;
         actualizado.area = 'B';
         actualizado.nombre = "Esto fue actualizado mediante un test";
         ManejadorProductos.Actualizar(actualizado);

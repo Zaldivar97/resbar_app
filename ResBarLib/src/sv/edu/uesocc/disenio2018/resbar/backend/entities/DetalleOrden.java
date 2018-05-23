@@ -1,6 +1,7 @@
 package sv.edu.uesocc.disenio2018.resbar.backend.entities;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -31,7 +32,7 @@ public class DetalleOrden implements Serializable {
 
     @Basic(optional = false)
     @Column(name = "cantidad", nullable = false, precision = 8, scale = 2)
-    public double cantidad;
+    public BigDecimal cantidad;
 
     @JoinColumn(name = "idOrden", referencedColumnName = "idOrden", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)

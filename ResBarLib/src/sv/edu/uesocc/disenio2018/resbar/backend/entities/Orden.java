@@ -2,6 +2,7 @@ package sv.edu.uesocc.disenio2018.resbar.backend.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -37,7 +38,7 @@ import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorAppli
     , @NamedQuery(name = "Orden.findByComentario", query = "SELECT o FROM Orden o WHERE o.comentario = :comentario")
     , @NamedQuery(name = "Orden.findByTotal", query = "SELECT o FROM Orden o WHERE o.total = :total")
 
-//    , @NamedQuery(name = "Orden.maxId", query = "SELECT MAX(o.idOrden) FROM Orden o")
+    , @NamedQuery(name = "Orden.maxId", query = "SELECT MAX(o.idOrden) FROM Orden o")
     , @NamedQuery(name = "Orden.obtenerVentas", query = "SELECT o FROM Orden o WHERE (o.fecha BETWEEN :inicio AND :fin) AND o.estado = false")
     , @NamedQuery(name = "Orden.findByParametro", query = "SELECT DISTINCT o FROM Orden o WHERE (UPPER(o.mesero) LIKE CONCAT('%',UPPER(:parametro),'%') OR UPPER(o.mesa) LIKE CONCAT('%',UPPER(:parametro),'%') OR UPPER(o.cliente) LIKE CONCAT('%',UPPER(:parametro),'%') OR UPPER(o.comentario) LIKE CONCAT('%',UPPER(:parametro),'%')) AND o.estado = true")
 
@@ -69,18 +70,18 @@ public class Orden implements Serializable {
     @Basic(optional = false)
     @Column(name = "fecha", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    public DateTime fecha;
+    public Date fecha;
 
     @Column(name = "comentario", length = 350)
     public String comentario;
 
     @Basic(optional = false)
     @Column(name = "total", nullable = false, precision = 10, scale = 4)
-    public double total;
+    public BigDecimal total;
 
     @Basic(optional = false)
     @Column(name = "estado", nullable = false)
-    public boolean activa;
+    public boolean estado;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orden", fetch = FetchType.LAZY)
     public List<DetalleOrden> detalle;
@@ -95,7 +96,7 @@ public class Orden implements Serializable {
         try {
             Query q = eml.createNamedQuery("Orden.calcularTotal");
             q.setParameter("idOrden", this.idOrden);
-            this.total = (double) q.getSingleResult();
+            this.total = (BigDecimal)q.getSingleResult();
 
         } catch (Exception ex) {
             throw new ErrorApplication("Error al calcular el total de la orden --> $Orden.calcularTotal()");
@@ -110,7 +111,7 @@ public class Orden implements Serializable {
         EntityManager eml = getEM();
 
         DetalleOrden detalleOrden = new DetalleOrden();
-        detalleOrden.cantidad = cantidad;
+        detalleOrden.cantidad = new BigDecimal(cantidad);
 
         DetalleOrdenPK detalleOrdenPK = new DetalleOrdenPK();
         detalleOrdenPK.idOrden = this.idOrden;

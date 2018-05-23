@@ -20,7 +20,7 @@ public class ManejadorProductos {
     }
 
     public static void Insertar(Producto entity) {
-        if (entity.idProducto <= 0 || entity.precio <= 0) {
+        if (entity.idProducto <= 0 || entity.precio.doubleValue() <= 0) {
             throw new ErrorApplication("ManejadorProductos.Insertar(:producto)$El ID y el precio deben ser mayor a cero");
         }
         if (entity.nombre.isEmpty()) {
@@ -73,7 +73,7 @@ public class ManejadorProductos {
 
     public static void Actualizar(Producto entity) {
 
-        if (entity.idProducto <= 0 || entity.precio <= 0) {
+        if (entity.idProducto <= 0 || entity.precio.doubleValue() <= 0) {
             throw new ErrorApplication("ManejadorProductos.Actualizar(:producto)$El ID y el precio deben ser mayor a cero");
         }
         if (entity.nombre.isEmpty()) {

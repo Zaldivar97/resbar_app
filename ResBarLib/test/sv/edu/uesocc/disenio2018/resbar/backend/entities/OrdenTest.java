@@ -48,8 +48,8 @@ public class OrdenTest {
         System.out.println("calcularTotal");
         Orden orden = ManejadorOrdenes.Obtener(1);
         orden.calcularTotal();
-        double total = 2 * 2.5;
-        assertTrue(total == orden.total);
+        BigDecimal total = new BigDecimal(2 * 2.5);
+        assertTrue(total.compareTo(orden.total)==0);
     }
 
     /**

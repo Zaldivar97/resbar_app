@@ -27,7 +27,7 @@ import javax.persistence.Table;
     , @NamedQuery(name = "Producto.findByNombre", query = "SELECT p FROM Producto p WHERE p.nombre = :nombre")
     , @NamedQuery(name = "Producto.findByPrecio", query = "SELECT p FROM Producto p WHERE p.precio = :precio")
     , @NamedQuery(name = "Producto.findByArea", query = "SELECT p FROM Producto p WHERE p.area = :area")
-    , @NamedQuery(name = "Producto.findByCategoria", query = "SELECT p FROM Producto p WHERE p.idCategoria.idCategoria = :categoria")
+//    , @NamedQuery(name = "Producto.findByCategoria", query = "SELECT p FROM Producto p WHERE p.idCategoria.idCategoria = :idCategoria")
     , @NamedQuery(name = "Producto.findByCharsequence", query = "SELECT p FROM Producto p WHERE LOWER(p.nombre) LIKE CONCAT('%',LOWER(:nombre),'%')")})
 public class Producto implements Serializable {
 
@@ -44,11 +44,11 @@ public class Producto implements Serializable {
 
     @Basic(optional = false)
     @Column(name = "precio", nullable = false, precision = 10, scale = 4)
-    public double precio;
+    public BigDecimal precio;
 
     @Basic(optional = false)
     @Column(name = "area", nullable = false)
-    public char area;
+    public Character area;
 
     @JoinColumn(name = "idCategoria", referencedColumnName = "idCategoria", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
