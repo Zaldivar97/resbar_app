@@ -135,13 +135,13 @@ public class ManejadorProductosTest {
     }
 
     /**
-     * Test of buscar method, of class ManejadorProductos.
+     * Test of Buscar method, of class ManejadorProductos.
      */
     @Test
     public void testBuscar() {
         System.out.println("buscar");
         String charSequence = "libre";
-        List<Producto> result = ManejadorProductos.buscar(charSequence);
+        List<Producto> result = ManejadorProductos.Buscar(charSequence);
         assertEquals(new Integer(3), result.get(0).idProducto);
     }
 

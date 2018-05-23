@@ -28,7 +28,7 @@ public class ManejadorOrdenes {
             q.setParameter("estado", true);
             return q.getResultList();
         } catch (Exception e) {
-            throw new ErrorApplication("Error al obtener ordenes activas --> $ManejadorOrden.obtenerActivas() \n" + e.getMessage());
+            throw new ErrorApplication("ManejadorOrdenes.ObtenerActivas()$Error al obtener ordenes activas");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -43,7 +43,7 @@ public class ManejadorOrdenes {
             q.setParameter("idOrden", id);
             return (Orden) q.getSingleResult();
         } catch (Exception e) {
-            throw new ErrorApplication("Error al obtener orden con id " + id + " --> $ManejadorOrden.obtenerVentas()");
+            throw new ErrorApplication("ManejadorOrdenes.Obtener(:int)$Error al obtener orden con id " + id);
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -67,7 +67,7 @@ public class ManejadorOrdenes {
                         if (et.isActive()) {
                             et.rollback();
                         }
-                        throw new ErrorApplication("Algo fallo intentando insertar un nueva orden --> $ManejadorOrden.insertar() ---> " + ex.getMessage());
+                        throw new ErrorApplication("ManejadorOrdenes.Insertar(:orden)$Algo fallo intentando insertar un nueva orden");
                     } finally {
                         if (eml.isOpen()) {
                             eml.close();
@@ -75,13 +75,13 @@ public class ManejadorOrdenes {
 
                     }
                 } else {
-                    throw new ErrorApplication("La orden debe tener al menos un producto --> $ManejadorOrden.insertar()");
+                    throw new ErrorApplication("ManejadorOrdenes.Insertar(:orden)$La orden debe tener al menos un producto");
                 }
             } else {
-                throw new ErrorApplication("La orden debe tener al menos un producto --> $ManejadorOrden.insertar()");
+                throw new ErrorApplication("ManejadorOrdenes.Insertar(:orden)$La orden debe tener al menos un producto");
             }
         } else {
-            throw new ErrorApplication("Al menos uno de los siguientes campos debe tener un valor: mesero, mesa, cliente --> $ManejadorOrden.insertar()");
+            throw new ErrorApplication("ManejadorOrdenes.Insertar(:orden)$Al menos uno de los siguientes campos debe tener un valor: mesero, mesa, cliente");
         }
     }
 
@@ -100,7 +100,7 @@ public class ManejadorOrdenes {
             if (trans.isActive()) {
                 trans.rollback();
             }
-            throw new ErrorApplication("Error al eliminar orden  --> $ManejadorOrden.eliminar()");
+            throw new ErrorApplication("ManejadorOrdenes.Eliminar(:orden)$Error al eliminar orden");
 
         } finally {
 
@@ -132,10 +132,10 @@ public class ManejadorOrdenes {
                 }
 
             } else {
-                throw new ErrorApplication("La orden debe tener al menos un producto");
+                throw new ErrorApplication("ManejadorOrdenes.Actualizar(:orden)$La orden debe tener al menos un producto");
             }
         } else {
-            throw new ErrorApplication("Al menos uno de los siguientes campos debe tener un valor: mesero, mesa, cliente");
+            throw new ErrorApplication("ManejadorOrdenes.Actualizar(:orden)$Al menos uno de los siguientes campos debe tener un valor: mesero, mesa, cliente");
         }
     }
 
@@ -148,7 +148,7 @@ public class ManejadorOrdenes {
             Query q = eml.createQuery(cq);
             return ((int) q.getSingleResult()) + 1;
         } catch (Exception e) {
-            throw new ErrorApplication("Error al obtenerID de Orden --> $ManejadorOrden.obtenerID()");
+            throw new ErrorApplication("ManejadorOrdenes.ObtenerId()$Error al obtener ID de Orden");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -163,7 +163,7 @@ public class ManejadorOrdenes {
             q.setParameter("parametro", parametro);
             return q.getResultList();
         } catch (Exception e) {
-            throw new ErrorApplication("Algo fallo intentando buscar ordenes activas --> $ManejadorOrden.buscarActivas(String parametro)");
+            throw new ErrorApplication("ManejadorOrdenes.BuscarActivas(:String)$Algo fallo intentando buscar ordenes activas");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -179,7 +179,7 @@ public class ManejadorOrdenes {
             q.setParameter("fin", fin, TemporalType.DATE);
             return q.getResultList();
         } catch (Exception e) {
-            throw new ErrorApplication("Error al obtenerVentas con fechas " + inicio + " - " + fin + " --> $ManejadorOrden.obtenerVentas()");
+            throw new ErrorApplication("ManejadorOrdenes.ObtenerVentas(:Date,:Date)$Error al obtenerVentas con fechas " + inicio + " - " + fin);
         } finally {
             if (eml.isOpen()) {
                 eml.close();

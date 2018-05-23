@@ -21,13 +21,13 @@ public class ManejadorProductos {
 
     public static void Insertar(Producto entity) {
         if (entity.idProducto <= 0 || entity.precio <= 0) {
-            throw new ErrorApplication("El ID y el precio deben ser mayor a cero --> $ManejadorProducto.insertar()");
+            throw new ErrorApplication("ManejadorProductos.Insertar(:producto)$El ID y el precio deben ser mayor a cero");
         }
         if (entity.nombre.isEmpty()) {
-            throw new ErrorApplication("El nombre del producto no puede estar vacío --> $ManejadorProducto.insertar()");
+            throw new ErrorApplication("ManejadorProductos.Insertar(:producto)$El nombre del producto no puede estar vacío");
         }
         if (entity.area != 'B' && entity.area != 'C') {
-            throw new ErrorApplication("El area del producto solamente puede ser del tipo C o B --> $ManejadorProducto.insertar()");
+            throw new ErrorApplication("ManejadorProductos.Insertar(:producto)$El area del producto solamente puede ser del tipo C o B");
         }
         EntityManager eml = getEM();
         EntityTransaction et = eml.getTransaction();
@@ -41,7 +41,7 @@ public class ManejadorProductos {
             if (et.isActive()) {
                 et.rollback();
             }
-            throw new ErrorApplication("Algo fallo intentando insertar un nuevo producto --> $ManejadorProducto.insertar()");
+            throw new ErrorApplication("ManejadorProductos.Insertar(:producto)$Algo fallo intentando insertar un nuevo producto");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -62,7 +62,7 @@ public class ManejadorProductos {
             if (trans.isActive()) {
                 trans.rollback();
             }
-            throw new ErrorApplication("Algo fallo intentando eliminar un producto --> $ManejadorProducto.eliminar()");
+            throw new ErrorApplication("ManejadorProductos.Eliminar(:producto)$Algo fallo intentando eliminar un producto");
 
         } finally {
             if (eml.isOpen()) {
@@ -74,13 +74,13 @@ public class ManejadorProductos {
     public static void Actualizar(Producto entity) {
 
         if (entity.idProducto <= 0 || entity.precio <= 0) {
-            throw new ErrorApplication("El ID y el precio deben ser mayor a cero --> $ManejadorProducto.insertar()");
+            throw new ErrorApplication("ManejadorProductos.Actualizar(:producto)$El ID y el precio deben ser mayor a cero");
         }
         if (entity.nombre.isEmpty()) {
-            throw new ErrorApplication("El nombre del producto no puede estar vacío --> $ManejadorProducto.insertar()");
+            throw new ErrorApplication("ManejadorProductos.Actualizar(:producto)$El nombre del producto no puede estar vacío");
         }
         if (entity.area != 'B' && entity.area != 'C') {
-            throw new ErrorApplication("El area del producto solamente puede ser del tipo C o B --> $ManejadorProducto.insertar()");
+            throw new ErrorApplication("ManejadorProductos.Actualizar(:producto)$El area del producto solamente puede ser del tipo C o B");
         }
         EntityManager eml = getEM();
         EntityTransaction et = eml.getTransaction();
@@ -94,7 +94,7 @@ public class ManejadorProductos {
             if (et.isActive()) {
                 et.rollback();
             }
-            throw new ErrorApplication("Algo fallo intentando actualizar un producto --> $ManejadorProducto.actualizar()");
+            throw new ErrorApplication("ManejadorProductos.Actualizar(:producto)$Algo fallo intentando actualizar un producto");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -107,7 +107,7 @@ public class ManejadorProductos {
         try {
             return eml.find(Producto.class, id);
         } catch (Exception e) {
-            throw new ErrorApplication("Algo fallo intentando obtener un producto con id: " + id + " --> $ManejadorProducto.obtener()");
+            throw new ErrorApplication("ManejadorProductos.Obtener(:int)$Algo fallo intentando obtener un producto con id: " + id);
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -124,7 +124,7 @@ public class ManejadorProductos {
             Query q = eml.createQuery(cq);
             return ((int) q.getSingleResult()) + 1;
         } catch (Exception ex) {
-            throw new ErrorApplication("Algo fallo intentando obtener el ID del ultimo producto creado --> $ManejadorProducto.obtenerID()");
+            throw new ErrorApplication("ManejadorProductos.ObtenerID()$Algo fallo intentando obtener el ID del ultimo producto creado");
 
         } finally {
             if (eml.isOpen()) {
@@ -134,13 +134,13 @@ public class ManejadorProductos {
     }
 
     public static List<Producto> ObtenerxCategoria(int id) {
-        EntityManager eml = getEM();//entitymanagerlocal
+        EntityManager eml = getEM();
         try {
             Query query = eml.createNamedQuery("Producto.findByCategoria");
             query.setParameter("categoria", id);
             return query.getResultList();
         } catch (Exception ex) {
-            throw new ErrorApplication("Algo fallo intentando obtener producto con ID categoria: " + id + " --> $ManejadorProducto.obtenerxCategoria()");
+            throw new ErrorApplication("ManejadorProductos.ObtenerxCategoria(:int)$Algo fallo intentando obtener producto con ID categoria: " + id);
 
         } finally {
             if (eml.isOpen()) {
@@ -149,14 +149,14 @@ public class ManejadorProductos {
         }
     }
 
-    public static List<Producto> buscar(String charSequence) {
+    public static List<Producto> Buscar(String charSequence) {
         EntityManager eml = getEM();
         try {
             Query query = eml.createNamedQuery("Producto.findByCharsequence");
             query.setParameter("nombre", charSequence);
             return query.getResultList();
         } catch (Exception e) {
-            throw new ErrorApplication("Algo fallo intentando obtener producto --> $ManejadorProducto.bucar()");
+            throw new ErrorApplication("ManejadorProductos.Buscar(:String)$Algo fallo intentando obtener producto");
 
         } finally {
             if (eml.isOpen()) {

@@ -30,7 +30,7 @@ public class ManejadorParametros {
             if (et.isActive()) {
                 et.rollback();
             }
-            throw new ErrorApplication("Fallo actualizar el parámetro --> $ManejadorPaŕametros.actualizar()");
+            throw new ErrorApplication("ManejadorParametros.Actualizar(:parametro)$Fallo actualizar el parámetro");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -46,7 +46,7 @@ public class ManejadorParametros {
             try {
                 return eml.find(Parametro.class, id);
             } catch (Exception e) {
-                throw new ErrorApplication("ManejadorPaŕametros.obtener()$" + e.getMessage());
+                throw new ErrorApplication("ManejadorParametros.Obtener(:int)$Fallo el obtener el parámetro");
             } finally {
                 if (eml.isOpen()) {
                     eml.close();
@@ -54,7 +54,7 @@ public class ManejadorParametros {
 
             }
         } else {
-            throw new ErrorApplication("ManejadorPaŕametros.obtener()$ID invalido");
+            throw new ErrorApplication("ManejadorParametros.Obtener(:int)$ID inválido");
         }
     }
 
@@ -64,7 +64,7 @@ public class ManejadorParametros {
             Query query = eml.createNamedQuery("Parametro.findAll");
             return query.getResultList();
         } catch (Exception ex) {
-            throw new ErrorApplication("Fallo obtener la lista de parámetros --> $ManejadorParámetros.obtener()");
+            throw new ErrorApplication("ManejadorParametros.Obtener()$Fallo obtener la lista de parámetros");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
