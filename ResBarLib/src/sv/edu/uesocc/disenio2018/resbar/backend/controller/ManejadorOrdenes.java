@@ -47,6 +47,10 @@ public class ManejadorOrdenes {
      * y luego devuelve el objeto orden completo que corresponde.
      */
     public static Orden Obtener(int id) {
+        if (id <= 0) {
+            throw new ErrorAplicacion("ManejadorOrdenes.Obtener(:int)$El ID debe ser mayor a cero");
+        }
+
         EntityManager eml = getEM();
         try {
             Query q = eml.createNamedQuery("Orden.findByIdOrden");

@@ -25,6 +25,10 @@ public class ManejadorParametros {
      * puede modificar el campo valor.
      */
     public static void Actualizar(Parametro entityObject) {
+        if (entityObject.nombre.isEmpty() || entityObject.valor.isEmpty()) {
+            throw new ErrorAplicacion("ManejadorParametros.Actualizar(:parametro)$El nombre y el valor del parametro no pueden estar vacíos");
+        }
+
         EntityManager eml = getEM();
         EntityTransaction et = eml.getTransaction();
         try {
@@ -47,25 +51,24 @@ public class ManejadorParametros {
     }
 
     /**
-     * Método: Obtener(idParametro:int):parametro Toma el ID parametro y busca en
-     * la base de datos una tupla que coincida con dicho ID, luego devuelve un
-     * objeto parametro construido acorde a la tupla.
+     * Método: Obtener(idParametro:int):parametro Toma el ID parametro y busca
+     * en la base de datos una tupla que coincida con dicho ID, luego devuelve
+     * un objeto parametro construido acorde a la tupla.
      */
     public static Parametro Obtener(Integer id) {
-        if (id > 0) {
-            EntityManager eml = getEM();
-            try {
-                return eml.find(Parametro.class, id);
-            } catch (Exception e) {
-                throw new ErrorAplicacion("ManejadorParametros.Obtener(:int)$Fallo el obtener el parámetro");
-            } finally {
-                if (eml.isOpen()) {
-                    eml.close();
-                }
+        if (id <= 0) {
+            throw new ErrorAplicacion("ManejadorParametros.Obtener(:int)$El ID debe ser mayor a cero");
+        }
 
+        EntityManager eml = getEM();
+        try {
+            return eml.find(Parametro.class, id);
+        } catch (Exception ex) {
+            throw new ErrorAplicacion("ManejadorParametros.Obtener(:int)$Fallo el obtener el parámetro");
+        } finally {
+            if (eml.isOpen()) {
+                eml.close();
             }
-        } else {
-            throw new ErrorAplicacion("ManejadorParametros.Obtener(:int)$ID inválido");
         }
     }
 

@@ -35,6 +35,7 @@ public class ManejadorProductos {
         if (entity.area != 'B' && entity.area != 'C') {
             throw new ErrorAplicacion("ManejadorProductos.Insertar(:producto)$El area del producto solamente puede ser del tipo C o B");
         }
+
         EntityManager eml = getEM();
         EntityTransaction et = eml.getTransaction();
         try {
@@ -60,6 +61,16 @@ public class ManejadorProductos {
      * datos.
      */
     public static void Eliminar(Producto entity) {
+        if (entity.idProducto <= 0 || entity.precio.doubleValue() <= 0) {
+            throw new ErrorAplicacion("ManejadorProductos.Eliminar(:producto)$El ID y el precio deben ser mayor a cero");
+        }
+        if (entity.nombre.isEmpty()) {
+            throw new ErrorAplicacion("ManejadorProductos.Eliminar(:producto)$El nombre del producto no puede estar vacío");
+        }
+        if (entity.area != 'B' && entity.area != 'C') {
+            throw new ErrorAplicacion("ManejadorProductos.Eliminar(:producto)$El area del producto solamente puede ser del tipo C o B");
+        }
+
         EntityManager eml = getEM();
         EntityTransaction trans = eml.getTransaction();
         try {
@@ -123,6 +134,10 @@ public class ManejadorProductos {
      * valor del parámetro.
      */
     public static Producto Obtener(Integer id) {
+        if (id <= 0) {
+            throw new ErrorAplicacion("ManejadorProductos.Obtener(:int)$El ID debe ser mayor a cero");
+        }
+
         EntityManager eml = getEM();
         try {
             return eml.find(Producto.class, id);
@@ -165,6 +180,10 @@ public class ManejadorProductos {
      * parámetro.
      */
     public static List<Producto> ObtenerxCategoria(int id) {
+        if (id <= 0) {
+            throw new ErrorAplicacion("ManejadorProductos.ObtenerxCategoria(:int)$El ID debe ser mayor a cero");
+        }
+
         EntityManager eml = getEM();
         try {
             Query query = eml.createNamedQuery("Producto.findByCategoria");

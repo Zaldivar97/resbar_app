@@ -21,7 +21,6 @@ import javax.persistence.Query;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorAplicacion;
 
 /**
@@ -109,7 +108,7 @@ public class Orden implements Serializable {
             this.total = (BigDecimal) q.getSingleResult();
 
         } catch (Exception ex) {
-            throw new ErrorAplicacion("Error al calcular el total de la orden --> $Orden.calcularTotal()" + ex.getMessage());
+            throw new ErrorAplicacion("Orden.CalcularTotal()$Error al calcular el total de la orden");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -128,7 +127,7 @@ public class Orden implements Serializable {
     public void AgregarProducto(Producto producto, double cant) {
 
         if (cant < 0) {
-            throw new ErrorAplicacion("La cantidad debe ser mayor a cero --> $Orden.agregarProducto()");
+            throw new ErrorAplicacion("Orden.AgregarProducto()$La cantidad debe ser mayor a cero");
         }
 
         EntityManager eml = getEM();
@@ -167,7 +166,7 @@ public class Orden implements Serializable {
             if (et.isActive()) {
                 et.rollback();
             }
-            throw new ErrorAplicacion("Algo fallo intentando insertar un nuevo producto --> $Orden.AgregarProducto() ---> " + ex.getMessage());
+            throw new ErrorAplicacion("Orden.AgregarProducto()$Algo fallo intentando agregar un nuevo producto");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -181,6 +180,10 @@ public class Orden implements Serializable {
      * productos de una orden y actualiza el total de la orden.
      */
     public void EliminarProducto(Producto producto, double cant) {
+        if (cant < 0) {
+            throw new ErrorAplicacion("Orden.EliminarProducto()$La cantidad debe ser mayor a cero");
+        }
+        
         EntityManager eml = getEM();
         try {
             if (cant > 0) {
@@ -194,7 +197,7 @@ public class Orden implements Serializable {
                 q.setParameter("idProducto", producto.idProducto);
             }
         } catch (Exception ex) {
-            throw new ErrorAplicacion("Error al eliminar productos de la orden --> $Orden.eliminarProductos()" + ex.getMessage());
+            throw new ErrorAplicacion("Orden.EliminarProducto()$Error al eliminar productos de la orden");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
