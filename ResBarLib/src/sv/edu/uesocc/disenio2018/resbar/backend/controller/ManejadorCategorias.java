@@ -26,7 +26,7 @@ public class ManejadorCategorias {
                 Query query = eml.createNamedQuery("Categoria.findAll");
                 return query.getResultList();
             } catch (Exception ex) {
-                throw new ErrorApplication("ManejadorCategorias.Obtener(:boolean)$Fallo obtener lista de categorias");
+                throw new ErrorApplication("ManejadorCategorias.Obtener(:boolean)$Fallo obtener lista de categorias"+ex.getMessage());
             } finally {
                 if (eml.isOpen()) {
                     eml.close();
@@ -34,10 +34,10 @@ public class ManejadorCategorias {
             }
         } else {
             try {
-                Query query = eml.createNamedQuery("Categoria.findAllWithoutDetails");
+                Query query = eml.createNamedQuery("Categoria.findAll");
                 return query.getResultList();
             } catch (Exception ex) {
-                throw new ErrorApplication("ManejadorCategorias.Obtener(:boolean)$Fallo obtener lista de categorias sin detalles");
+                throw new ErrorApplication("ManejadorCategorias.Obtener(:boolean)$Fallo obtener lista de categorias sin detalles"+ex.getMessage());
             } finally {
                 if (eml.isOpen()) {
                     eml.close();
@@ -60,7 +60,7 @@ public class ManejadorCategorias {
                 if (et.isActive()) {
                     et.rollback();
                 }
-                throw new ErrorApplication("ManejadorCategorias.Actualizar(:categoria)$Fallo actualizar la categoria");
+                throw new ErrorApplication("ManejadorCategorias.Actualizar(:categoria)$Fallo actualizar la categoria"+ex.getMessage());
             } finally {
                 if (eml.isOpen()) {
                     eml.close();
@@ -86,7 +86,7 @@ public class ManejadorCategorias {
                 if (et.isActive()) {
                     et.rollback();
                 }
-                throw new ErrorApplication("ManejadorCategorias.Insertar(:categoria)$Fallo al crear la categoria");
+                throw new ErrorApplication("ManejadorCategorias.Insertar(:categoria)$Fallo al crear la categoria"+ex.getMessage());
             } finally {
                 if (eml.isOpen()) {
                     eml.close();
@@ -112,7 +112,7 @@ public class ManejadorCategorias {
             if (trans.isActive()) {
                 trans.rollback();
             }
-            throw new ErrorApplication("ManejadorCategorias.Eliminar(:categoria)$Fallo eliminar la categoria");
+            throw new ErrorApplication("ManejadorCategorias.Eliminar(:categoria)$Fallo eliminar la categoria"+ex.getMessage());
         } finally {
             eml.close();
         }
@@ -127,7 +127,7 @@ public class ManejadorCategorias {
             Query q = eml.createQuery(cq);
             return ((int) q.getSingleResult()) + 1;
         } catch (Exception ex) {
-            throw new ErrorApplication("ManejadorCategorias.ObtenerId()$Fallo obtener ID para la nueva categoria");
+            throw new ErrorApplication("ManejadorCategorias.ObtenerId()$Fallo obtener ID para la nueva categoria"+ex.getMessage());
         } finally {
             if (eml.isOpen()) {
                 eml.close();
