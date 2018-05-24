@@ -20,6 +20,7 @@ import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorAppli
 import sv.edu.uesocc.disenio2018.resbar.backend.entities.DetalleOrden;
 import sv.edu.uesocc.disenio2018.resbar.backend.entities.DetalleOrdenPK;
 import sv.edu.uesocc.disenio2018.resbar.backend.entities.Orden;
+import sv.edu.uesocc.disenio2018.resbar.backend.entities.Producto;
 
 /**
  * @author irvin
@@ -54,7 +55,11 @@ public class ManejadorOrdenesTest {
         System.out.println("obtenerActivas");
         List<Orden> result = ManejadorOrdenes.ObtenerActivas();
         assertEquals(4, result.size());
+        System.out.println("*********** Detalle orden "+result.get(0).detalle);
+        Producto p = result.get(0).detalle.get(0).producto;
+        System.out.println("*********** Producto del detalle: "+ p);
         assertEquals(true, result.get(0).estado);
+        
     }
 
     /**

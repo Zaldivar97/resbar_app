@@ -28,7 +28,7 @@ public class ManejadorOrdenes {
             q.setParameter("estado", true);
             return q.getResultList();
         } catch (Exception e) {
-            throw new ErrorApplication("ManejadorOrdenes.ObtenerActivas()$Error al obtener ordenes activas");
+            throw new ErrorApplication("ManejadorOrdenes.ObtenerActivas()$Error al obtener ordenes activas"+e.getMessage());
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -43,7 +43,7 @@ public class ManejadorOrdenes {
             q.setParameter("idOrden", id);
             return (Orden) q.getSingleResult();
         } catch (Exception e) {
-            throw new ErrorApplication("ManejadorOrdenes.Obtener(:int)$Error al obtener orden con id " + id);
+            throw new ErrorApplication("ManejadorOrdenes.Obtener(:int)$Error al obtener orden con id " + id+e.getMessage());
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -67,7 +67,7 @@ public class ManejadorOrdenes {
                         if (et.isActive()) {
                             et.rollback();
                         }
-                        throw new ErrorApplication("ManejadorOrdenes.Insertar(:orden)$Algo fallo intentando insertar un nueva orden");
+                        throw new ErrorApplication("ManejadorOrdenes.Insertar(:orden)$Algo fallo intentando insertar un nueva orden"+ex.getMessage());
                     } finally {
                         if (eml.isOpen()) {
                             eml.close();
@@ -100,7 +100,7 @@ public class ManejadorOrdenes {
             if (trans.isActive()) {
                 trans.rollback();
             }
-            throw new ErrorApplication("ManejadorOrdenes.Eliminar(:orden)$Error al eliminar orden");
+            throw new ErrorApplication("ManejadorOrdenes.Eliminar(:orden)$Error al eliminar orden"+ex.getMessage());
 
         } finally {
 
@@ -125,6 +125,7 @@ public class ManejadorOrdenes {
                     if (et.isActive()) {
                         et.rollback();
                     }
+                    throw new ErrorApplication("ManejadorOrdenes.Actualizar(:orden)$Error al actualizar orden"+ex.getMessage());
                 } finally {
                     if (eml.isOpen()) {
                         eml.close();
