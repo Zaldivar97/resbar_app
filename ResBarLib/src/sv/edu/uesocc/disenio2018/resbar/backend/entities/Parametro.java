@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sv.edu.uesocc.disenio2018.resbar.backend.entities;
 
 import java.io.Serializable;
@@ -15,8 +10,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
- *
- * @author zaldivar
+ * Clase: Parametro. La clase “Parametro” representa un objeto parámetro con
+ * todas sus propiedades establecidas.
  */
 @Entity
 @Table(name = "Parametro", catalog = "resbar", schema = "")
@@ -28,77 +23,18 @@ import javax.persistence.Table;
 public class Parametro implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Id
     @Basic(optional = false)
     @Column(name = "idParametro", nullable = false)
-    private Integer idParametro;
+    public Integer idParametro;
+
     @Basic(optional = false)
     @Column(name = "nombre", nullable = false, length = 100)
-    private String nombre;
+    public String nombre;
+
     @Basic(optional = false)
     @Column(name = "valor", nullable = false, length = 400)
-    private String valor;
+    public String valor;
 
-    public Parametro() {
-    }
-
-    public Parametro(Integer idParametro) {
-        this.idParametro = idParametro;
-    }
-
-    public Parametro(Integer idParametro, String nombre, String valor) {
-        this.idParametro = idParametro;
-        this.nombre = nombre;
-        this.valor = valor;
-    }
-
-    public Integer getIdParametro() {
-        return idParametro;
-    }
-
-    public void setIdParametro(Integer idParametro) {
-        this.idParametro = idParametro;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getValor() {
-        return valor;
-    }
-
-    public void setValor(String valor) {
-        this.valor = valor;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idParametro != null ? idParametro.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Parametro)) {
-            return false;
-        }
-        Parametro other = (Parametro) object;
-        if ((this.idParametro == null && other.idParametro != null) || (this.idParametro != null && !this.idParametro.equals(other.idParametro))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "sv.edu.uesocc.disenio2018.resbar.backend.entities.Parametro[ idParametro=" + idParametro + " ]";
-    }
-    
 }

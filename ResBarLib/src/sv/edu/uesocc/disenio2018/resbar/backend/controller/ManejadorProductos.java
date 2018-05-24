@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sv.edu.uesocc.disenio2018.resbar.backend.controller;
 
-import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -13,12 +7,13 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorApplication;
+import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorAplicacion;
 import sv.edu.uesocc.disenio2018.resbar.backend.entities.Producto;
 
 /**
- *
- * @author zaldivar
+ * ManejadorProductos. Clase Controladora que brinda servicios para los
+ * diferentes acciones a realizar con los objetos productos, los métodos de esta
+ * clase son STATIC.
  */
 public class ManejadorProductos {
 
@@ -26,15 +21,19 @@ public class ManejadorProductos {
         return Persistence.createEntityManagerFactory("ResbarBackendPU").createEntityManager();
     }
 
-    public static void insertar(Producto entity) {
-        if (entity.getIdProducto() <= 0 || entity.getPrecio().doubleValue() <= 0) {
-            throw new ErrorApplication("El ID y el precio deben ser mayor a cero --> $ManejadorProducto.insertar()");
+    /**
+     * Método: Insertar(p: producto) Agrega el objeto “producto” a la base de
+     * datos.
+     */
+    public static void Insertar(Producto entity) {
+        if (entity.idProducto <= 0 || entity.precio.doubleValue() <= 0) {
+            throw new ErrorAplicacion("ManejadorProductos.Insertar(:producto)$El ID y el precio deben ser mayor a cero");
         }
-        if (entity.getNombre().isEmpty()) {
-            throw new ErrorApplication("El nombre del producto no puede estar vacío --> $ManejadorProducto.insertar()");
+        if (entity.nombre.isEmpty()) {
+            throw new ErrorAplicacion("ManejadorProductos.Insertar(:producto)$El nombre del producto no puede estar vacío");
         }
-        if(entity.getArea()!='B'&&entity.getArea()!='C'){
-            throw new ErrorApplication("El area del producto solamente puede ser del tipo C o B --> $ManejadorProducto.insertar()");
+        if (entity.area != 'B' && entity.area != 'C') {
+            throw new ErrorAplicacion("ManejadorProductos.Insertar(:producto)$El area del producto solamente puede ser del tipo C o B");
         }
         EntityManager eml = getEM();
         EntityTransaction et = eml.getTransaction();
@@ -48,17 +47,19 @@ public class ManejadorProductos {
             if (et.isActive()) {
                 et.rollback();
             }
-            throw new ErrorApplication("Algo fallo intentando insertar un nuevo producto --> $ManejadorProducto.insertar()");
+            throw new ErrorAplicacion("ManejadorProductos.Insertar(:producto)$Algo fallo intentando insertar un nuevo producto");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
             }
-
         }
-
     }
 
-    public static void eliminar(Producto entity) {
+    /**
+     * Método: Eliminar(p: producto) Elimina el objeto “producto” de la base de
+     * datos.
+     */
+    public static void Eliminar(Producto entity) {
         EntityManager eml = getEM();
         EntityTransaction trans = eml.getTransaction();
         try {
@@ -66,14 +67,12 @@ public class ManejadorProductos {
                 trans.begin();
             }
             eml.remove(eml.merge(entity));
-
             trans.commit();
-
         } catch (Exception ex) {
             if (trans.isActive()) {
                 trans.rollback();
             }
-            throw new ErrorApplication("Algo fallo intentando eliminar un producto --> $ManejadorProducto.eliminar()");
+            throw new ErrorAplicacion("ManejadorProductos.Eliminar(:producto)$Algo fallo intentando eliminar un producto");
 
         } finally {
             if (eml.isOpen()) {
@@ -82,16 +81,21 @@ public class ManejadorProductos {
         }
     }
 
-    public static void actualizar(Producto entity) {
+    /**
+     * Método: Actualizar(p: producto) Si el objeto “producto” se desea
+     * modificar este actualizara en la base de datos cuando este ya este
+     * modificado, no se modificara el ID del producto solo sus otros campos.
+     */
+    public static void Actualizar(Producto entity) {
 
-        if (entity.getIdProducto() <= 0 || entity.getPrecio().doubleValue() <= 0) {
-            throw new ErrorApplication("El ID y el precio deben ser mayor a cero --> $ManejadorProducto.insertar()");
+        if (entity.idProducto <= 0 || entity.precio.doubleValue() <= 0) {
+            throw new ErrorAplicacion("ManejadorProductos.Actualizar(:producto)$El ID y el precio deben ser mayor a cero");
         }
-        if (entity.getNombre().isEmpty()) {
-            throw new ErrorApplication("El nombre del producto no puede estar vacío --> $ManejadorProducto.insertar()");
+        if (entity.nombre.isEmpty()) {
+            throw new ErrorAplicacion("ManejadorProductos.Actualizar(:producto)$El nombre del producto no puede estar vacío");
         }
-        if(entity.getArea()!='B'&&entity.getArea()!='C'){
-            throw new ErrorApplication("El area del producto solamente puede ser del tipo C o B --> $ManejadorProducto.insertar()");
+        if (entity.area != 'B' && entity.area != 'C') {
+            throw new ErrorAplicacion("ManejadorProductos.Actualizar(:producto)$El area del producto solamente puede ser del tipo C o B");
         }
         EntityManager eml = getEM();
         EntityTransaction et = eml.getTransaction();
@@ -105,34 +109,38 @@ public class ManejadorProductos {
             if (et.isActive()) {
                 et.rollback();
             }
-            throw new ErrorApplication("Algo fallo intentando actualizar un producto --> $ManejadorProducto.actualizar()");
-
+            throw new ErrorAplicacion("ManejadorProductos.Actualizar(:producto)$Algo fallo intentando actualizar un producto");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
             }
-
         }
-
     }
 
-//  
-    public static Producto obtener(Integer id) {
+    /**
+     * Método: Obtener(:integer): producto Realiza una petición a la base de
+     * datos y devuelve un objeto producto que cuyo IDProducto coincide con el
+     * valor del parámetro.
+     */
+    public static Producto Obtener(Integer id) {
         EntityManager eml = getEM();
         try {
             return eml.find(Producto.class, id);
         } catch (Exception e) {
-            throw new ErrorApplication("Algo fallo intentando obtener un producto con id: " + id + " --> $ManejadorProducto.obtener()");
-
+            throw new ErrorAplicacion("ManejadorProductos.Obtener(:int)$Algo fallo intentando obtener un producto con id: " + id);
         } finally {
             if (eml.isOpen()) {
                 eml.close();
             }
-
         }
     }
 
-    public static int obtenerID() {
+    /**
+     * Método: ObtenerId(): integer Obtiene el identificador de producto, va la
+     * base de datos a obtener el ultimo ID de producto y le suma uno a dicho
+     * valor.
+     */
+    public static int ObtenerID() {
         EntityManager eml = getEM();
         try {
             CriteriaQuery cq = eml.getCriteriaBuilder().createQuery(Integer.class);
@@ -141,7 +149,7 @@ public class ManejadorProductos {
             Query q = eml.createQuery(cq);
             return ((int) q.getSingleResult()) + 1;
         } catch (Exception ex) {
-            throw new ErrorApplication("Algo fallo intentando obtener el ID del ultimo producto creado --> $ManejadorProducto.obtenerID()");
+            throw new ErrorAplicacion("ManejadorProductos.ObtenerID()$Algo fallo intentando obtener el ID del ultimo producto creado");
 
         } finally {
             if (eml.isOpen()) {
@@ -150,15 +158,21 @@ public class ManejadorProductos {
         }
     }
 
-    public static List<Producto> obtenerxCategoria(int id) {
-        EntityManager eml = getEM();//entitymanagerlocal
+    /**
+     * Método: ObtenerxCategoria(IdCat:integer): Producto[] Realiza una petición
+     * a la base de datos y devuelve una colección de objetos productos que se
+     * corresponden con el Identificador de categoría que se pasó como
+     * parámetro.
+     */
+    public static List<Producto> ObtenerxCategoria(int id) {
+        EntityManager eml = getEM();
         try {
-
             Query query = eml.createNamedQuery("Producto.findByCategoria");
-            query.setParameter("categoria", id);
+            query.setParameter("idCategoria", id);
             return query.getResultList();
         } catch (Exception ex) {
-            throw new ErrorApplication("Algo fallo intentando obtener producto con ID categoria: " + id + " --> $ManejadorProducto.obtenerxCategoria()");
+
+            throw new ErrorAplicacion("ManejadorProductos.ObtenerxCategoria(:int)$Algo fallo intentando obtener producto con ID categoria: " + id);
 
         } finally {
             if (eml.isOpen()) {
@@ -167,14 +181,20 @@ public class ManejadorProductos {
         }
     }
 
-    public static List<Producto> buscar(String charSequence) {
+    /**
+     * Método: Buscar(:String): Producto[] Toma la cadena pasada como parametro
+     * como criterio de búsqueda, para ir a la base de datos y buscar todos los
+     * productos cuyo Id o nombre coincida con el criterio de búsqueda, luego
+     * devuelve la colección de productos, sin devolver productos duplicados.
+     */
+    public static List<Producto> Buscar(String charSequence) {
         EntityManager eml = getEM();
         try {
             Query query = eml.createNamedQuery("Producto.findByCharsequence");
             query.setParameter("nombre", charSequence);
             return query.getResultList();
         } catch (Exception e) {
-            throw new ErrorApplication("Algo fallo intentando obtener producto --> $ManejadorProducto.bucar()");
+            throw new ErrorAplicacion("ManejadorProductos.Buscar(:String)$Algo fallo intentando obtener producto");
 
         } finally {
             if (eml.isOpen()) {
@@ -184,28 +204,3 @@ public class ManejadorProductos {
     }
 
 }
-//  protected static List<Object> findEntities() {
-//        return findEntities(true, -1, -1);
-//    }
-//
-//    protected static List<Object> findEntities(int maxResults, int firstResult) {
-//        return findEntities(false, maxResults, firstResult);
-//    }
-//
-//    private static List<Object> findEntities(boolean all, int maxResults, int firstResult) {
-//        EntityManager eml = getEM();
-//        try {
-//            CriteriaQuery cq = eml.getCriteriaBuilder().createQuery();
-//            cq.select(cq.from(Producto.class));
-//            Query q = eml.createQuery(cq);
-//            if (!all) {
-//                q.setMaxResults(maxResults);
-//                q.setFirstResult(firstResult);
-//            }
-//            return q.getResultList();
-//        } finally {
-//            if (eml.isOpen()) {
-//                eml.close();
-//            }
-//        }
-//    }

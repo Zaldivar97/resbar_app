@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sv.edu.uesocc.disenio2018.resbar.backend.controller;
 
 import java.util.List;
@@ -10,12 +5,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorApplication;
+import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorAplicacion;
 import sv.edu.uesocc.disenio2018.resbar.backend.entities.Parametro;
 
 /**
- *
- * @author zaldivar
+ * ManejadorParametros. Clase Controladora que brinda servicios para los
+ * diferentes acciones a realizar con los parámetros, los métodos de esta clase
+ * son STATIC.
  */
 public class ManejadorParametros {
 
@@ -23,7 +19,12 @@ public class ManejadorParametros {
         return Persistence.createEntityManagerFactory("ResbarBackendPU").createEntityManager();
     }
 
-    public static void actualizar(Parametro entityObject) {
+    /**
+     * Método: Actualizar(:parametro) Actualiza el valor del parámetro en la
+     * base de datos, no se puede actualizar ni el ID, ni el nombre, solo se
+     * puede modificar el campo valor.
+     */
+    public static void Actualizar(Parametro entityObject) {
         EntityManager eml = getEM();
         EntityTransaction et = eml.getTransaction();
         try {
@@ -36,7 +37,7 @@ public class ManejadorParametros {
             if (et.isActive()) {
                 et.rollback();
             }
-            throw new ErrorApplication("Fallo actualizar el parámetro --> $ManejadorPaŕametros.actualizar()");
+            throw new ErrorAplicacion("ManejadorParametros.Actualizar(:parametro)$Fallo actualizar el parámetro");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -45,28 +46,41 @@ public class ManejadorParametros {
         }
     }
 
-    //Revisar el return
-    public static Parametro obtener(Integer id) {
-        EntityManager eml = getEM();
-        try {
-            return eml.find(Parametro.class, id);
-        } catch (Exception e) {
-            throw new ErrorApplication("Fallo obtener el parámetro --> $ManejadorPaŕametros.obtener()");
-        } finally {
-            if (eml.isOpen()) {
-                eml.close();
-            }
+    /**
+     * Método: Obtener(idParametro:int):parametro Toma el ID parametro y busca en
+     * la base de datos una tupla que coincida con dicho ID, luego devuelve un
+     * objeto parametro construido acorde a la tupla.
+     */
+    public static Parametro Obtener(Integer id) {
+        if (id > 0) {
+            EntityManager eml = getEM();
+            try {
+                return eml.find(Parametro.class, id);
+            } catch (Exception e) {
+                throw new ErrorAplicacion("ManejadorParametros.Obtener(:int)$Fallo el obtener el parámetro");
+            } finally {
+                if (eml.isOpen()) {
+                    eml.close();
+                }
 
+            }
+        } else {
+            throw new ErrorAplicacion("ManejadorParametros.Obtener(:int)$ID inválido");
         }
     }
 
-    public static List<Parametro> obtener() {
+    /**
+     * Método: Obtener(): Parametro[] Va a la base de datos y obtiene todos los
+     * parametros que están en dicha tabla, devolviendo una colección de objetos
+     * parametros.
+     */
+    public static List<Parametro> Obtener() {
         EntityManager eml = getEM();
         try {
             Query query = eml.createNamedQuery("Parametro.findAll");
             return query.getResultList();
         } catch (Exception ex) {
-            throw new ErrorApplication("Fallo obtener la lista de parámetros --> $ManejadorParámetros.obtener()");
+            throw new ErrorAplicacion("ManejadorParametros.Obtener()$Fallo obtener la lista de parámetros");
         } finally {
             if (eml.isOpen()) {
                 eml.close();

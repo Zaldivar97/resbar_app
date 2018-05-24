@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sv.edu.uesocc.disenio2018.resbar.backend.entities;
 
 import java.io.Serializable;
@@ -19,8 +14,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
- *
- * @author zaldivar
+ * Clase: DetalleOrden. La clase “DetalleOrden” representa un objeto detalle de
+ * orden con todas sus propiedades establecidas. Propiedades a comentar: La
+ * propiedad producto tiene un objeto de la clase producto.
  */
 @Entity
 @Table(name = "DetalleOrden", catalog = "resbar", schema = "")
@@ -32,90 +28,20 @@ import javax.persistence.Table;
 public class DetalleOrden implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @EmbeddedId
-    protected DetalleOrdenPK detalleOrdenPK;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    public DetalleOrdenPK detalleOrdenPK;
+
     @Basic(optional = false)
     @Column(name = "cantidad", nullable = false, precision = 8, scale = 2)
-    private BigDecimal cantidad;
+    public BigDecimal cantidad;
+
     @JoinColumn(name = "idOrden", referencedColumnName = "idOrden", nullable = false, insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Orden orden;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    public Orden orden;
+
     @JoinColumn(name = "idProducto", referencedColumnName = "idProducto", nullable = false, insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Producto producto;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    public Producto producto;
 
-    public DetalleOrden() {
-    }
-
-    public DetalleOrden(DetalleOrdenPK detalleOrdenPK) {
-        this.detalleOrdenPK = detalleOrdenPK;
-    }
-
-    public DetalleOrden(DetalleOrdenPK detalleOrdenPK, BigDecimal cantidad) {
-        this.detalleOrdenPK = detalleOrdenPK;
-        this.cantidad = cantidad;
-    }
-
-    public DetalleOrden(int idOrden, int idProducto) {
-        this.detalleOrdenPK = new DetalleOrdenPK(idOrden, idProducto);
-    }
-
-    public DetalleOrdenPK getDetalleOrdenPK() {
-        return detalleOrdenPK;
-    }
-
-    public void setDetalleOrdenPK(DetalleOrdenPK detalleOrdenPK) {
-        this.detalleOrdenPK = detalleOrdenPK;
-    }
-
-    public BigDecimal getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(BigDecimal cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public Orden getOrden() {
-        return orden;
-    }
-
-    public void setOrden(Orden orden) {
-        this.orden = orden;
-    }
-
-    public Producto getProducto() {
-        return producto;
-    }
-
-    public void setProducto(Producto producto) {
-        this.producto = producto;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (detalleOrdenPK != null ? detalleOrdenPK.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof DetalleOrden)) {
-            return false;
-        }
-        DetalleOrden other = (DetalleOrden) object;
-        if ((this.detalleOrdenPK == null && other.detalleOrdenPK != null) || (this.detalleOrdenPK != null && !this.detalleOrdenPK.equals(other.detalleOrdenPK))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "sv.edu.uesocc.disenio2018.resbar.backend.entities.DetalleOrden[ detalleOrdenPK=" + detalleOrdenPK + " ]";
-    }
-    
 }

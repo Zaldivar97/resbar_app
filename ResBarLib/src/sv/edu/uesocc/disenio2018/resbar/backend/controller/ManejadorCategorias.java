@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sv.edu.uesocc.disenio2018.resbar.backend.controller;
 
 import java.util.List;
@@ -12,12 +7,14 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorApplication;
+import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorAplicacion;
 import sv.edu.uesocc.disenio2018.resbar.backend.entities.Categoria;
 
 /**
- *
- * @author irvin
+ * ManejadorCategorias. Clase encargada de los servicios para las categorías,
+ * los métodos de esta clase también serán STATIC. Propiedades a comentar:
+ * Obtener() tendrá un valor verdadero que cargaran los subproductos, y si su
+ * valor es falso no se cargaran los subproductos.
  */
 public class ManejadorCategorias {
 
@@ -25,30 +22,107 @@ public class ManejadorCategorias {
         return Persistence.createEntityManagerFactory("ResbarBackendPU").createEntityManager();
     }
 
-    public static void insertar(Categoria categoria) {
-
+    /**
+     * Método: Obtener(:boolean): categoria[] Realiza una petición a la base de
+     * datos y devuelve una colección de categorías, si el valor del parametro
+     * es TRUE cargara todos los productos que están en esa categoría, si el
+     * valor del parametro es FALSE la propiedad “productos” de cada categoría
+     * será NULL.
+     */
+    public static List<Categoria> Obtener(boolean withDetails) {
         EntityManager eml = getEM();
-        EntityTransaction et = eml.getTransaction();
-        try {
-            if (!et.isActive()) {
-                et.begin();
+        if (withDetails) {
+            try {
+                Query query = eml.createNamedQuery("Categoria.findAll");
+                return query.getResultList();
+            } catch (Exception ex) {
+                throw new ErrorAplicacion("ManejadorCategorias.Obtener(:boolean)$Fallo obtener lista de categorias");
+            } finally {
+                if (eml.isOpen()) {
+                    eml.close();
+                }
             }
-            eml.persist(categoria);
-            et.commit();
-        } catch (Exception ex) {
-            if (et.isActive()) {
-                et.rollback();
+        } else {
+            try {
+                Query query = eml.createNamedQuery("Categoria.findAllWithoutDetails");
+                return query.getResultList();
+            } catch (Exception ex) {
+                throw new ErrorAplicacion("ManejadorCategorias.Obtener(:boolean)$Fallo obtener lista de categorias sin detalles");
+            } finally {
+                if (eml.isOpen()) {
+                    eml.close();
+                }
             }
-            throw new ErrorApplication("Fallo al crear la categoria --> $ManejadorCategorias.insertar()");
-        } finally {
-            if (eml.isOpen()) {
-                eml.close();
-            }
-
         }
     }
 
-    public static void eliminar(Categoria categoria) {
+    /**
+     * Método: Actualizar(c: categoria) Si se desea modificar el objeto
+     * “categoria” este actualizara en la base de datos cuando este ya este
+     * modificado, no se modificara el IDCategoria.
+     */
+    public static void Actualizar(Categoria categoria) {
+        if (!categoria.nombre.isEmpty()) {
+            EntityManager eml = getEM();
+            EntityTransaction et = eml.getTransaction();
+            try {
+                if (!et.isActive()) {
+                    et.begin();
+                }
+                eml.merge(categoria);
+                et.commit();
+            } catch (Exception ex) {
+                if (et.isActive()) {
+                    et.rollback();
+                }
+                throw new ErrorAplicacion("ManejadorCategorias.Actualizar(:categoria)$Fallo actualizar la categoria");
+            } finally {
+                if (eml.isOpen()) {
+                    eml.close();
+                }
+
+            }
+        } else {
+            throw new ErrorAplicacion("ManejadorCategorias.Actualizar(:categoria)$La categoria debe tener un nombre");
+        }
+    }
+
+    /**
+     * Método: Insertar(c: categoria) Agrega el objeto “categoria” a la base de
+     * datos.
+     */
+    public static void Insertar(Categoria categoria) {
+        if (!categoria.nombre.isEmpty()) {
+            EntityManager eml = getEM();
+            EntityTransaction et = eml.getTransaction();
+            try {
+                if (!et.isActive()) {
+                    et.begin();
+                }
+                eml.persist(categoria);
+                et.commit();
+            } catch (Exception ex) {
+                if (et.isActive()) {
+                    et.rollback();
+                }
+                throw new ErrorAplicacion("ManejadorCategorias.Insertar(:categoria)$Fallo al crear la categoria");
+            } finally {
+                if (eml.isOpen()) {
+                    eml.close();
+                }
+
+            }
+        } else {
+            throw new ErrorAplicacion("ManejadorCategorias.Insertar(:categoria)$La categoria debe tener un nombre");
+        }
+
+    }
+
+    /**
+     * Método: Eliminar(c: categoria) Elimina el objeto “categoria” de la base
+     * de datos.
+     */
+    public static void Eliminar(Categoria categoria) {
         EntityManager eml = getEM();
         EntityTransaction trans = eml.getTransaction();
         try {
@@ -61,35 +135,18 @@ public class ManejadorCategorias {
             if (trans.isActive()) {
                 trans.rollback();
             }
-            throw new ErrorApplication("Fallo eliminar la categoria --> $ManejadorCategorias.eliminar()");
+            throw new ErrorAplicacion("ManejadorCategorias.Eliminar(:categoria)$Fallo eliminar la categoria");
         } finally {
             eml.close();
         }
     }
 
-    public static void actualizar(Categoria categoria) {
-        EntityManager eml = getEM();
-        EntityTransaction et = eml.getTransaction();
-        try {
-            if (!et.isActive()) {
-                et.begin();
-            }
-            eml.merge(categoria);
-            et.commit();
-        } catch (Exception ex) {
-            if (et.isActive()) {
-                et.rollback();
-            }
-            throw new ErrorApplication("Fallo actualizar la categoria --> $ManejadorCategorias.actualizar()");
-        } finally {
-            if (eml.isOpen()) {
-                eml.close();
-            }
-
-        }
-    }
-
-    public static int obtenerID() {
+    /**
+     * Método: ObtenerId(): integer Obtiene el identificador de categoria, va la
+     * base de datos a obtener el ultimo ID de categoria y le suma uno a dicho
+     * valor.
+     */
+    public static int ObtenerId() {
         EntityManager eml = getEM();
         try {
             CriteriaQuery cq = eml.getCriteriaBuilder().createQuery(Integer.class);
@@ -98,49 +155,12 @@ public class ManejadorCategorias {
             Query q = eml.createQuery(cq);
             return ((int) q.getSingleResult()) + 1;
         } catch (Exception ex) {
-            throw new ErrorApplication("Fallo obtener ID para la nueva categoria --> $ManejadorCategorias.obtenerID()");
+            throw new ErrorAplicacion("ManejadorCategorias.ObtenerId()$Fallo obtener ID para la nueva categoria");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
             }
         }
-    }
-    
-    public static Categoria obtener(int id){
-        EntityManager eml = getEM();
-        try {
-            return eml.find(Categoria.class, id);
-            
-        } catch (Exception e) {
-            throw new ErrorApplication("Fallo obtener categoría con id: "+id+" --> $ManejadorCategorias.obtenerID()");
-        }
-    }
-
-    public static List<Categoria> obtener(boolean withDetails) {
-        EntityManager eml = getEM();
-        if (withDetails) {
-            try {
-                Query query = eml.createNamedQuery("Categoria.findAll");
-                return query.getResultList();
-            } catch (Exception ex) {
-                throw new ErrorApplication("Fallo obtener lista de categorias --> $ManejadorCategorias.obtener()");
-            } finally {
-                if (eml.isOpen()) {
-                    eml.close();
-                }
-            }
-        } else{
-            try {
-                Query query = eml.createNamedQuery("Categoria.findAllWithoutDetails");
-                return query.getResultList();
-            } catch (Exception ex) {
-                throw new ErrorApplication("Fallo obtener lista de categorias sin detalles --> $ManejadorCategorias.obtener()");
-            } finally {
-                if (eml.isOpen()) {
-                    eml.close();
-                }
-            }
-        } 
     }
 
 }

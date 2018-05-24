@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sv.edu.uesocc.disenio2018.resbar.backend.entities;
 
 import java.io.Serializable;
@@ -19,89 +14,33 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- *
- * @author zaldivar
+ * Clase: Categoria. La clase “Categoria” representa un objeto categoría con
+ * todas sus propiedades establecidas, cada categoría contiene una colección de
+ * productos. Propiedades a comentar: La propiedad productos tendrá una
+ * colección de objetos de la clase producto.
  */
 @Entity
 @Table(name = "Categoria", catalog = "resbar", schema = "")
 @NamedQueries({
     @NamedQuery(name = "Categoria.findAll", query = "SELECT c FROM Categoria c")
     , @NamedQuery(name = "Categoria.findAllWithoutDetails", query = "SELECT c.idCategoria,c.nombre FROM Categoria c")
-    , @NamedQuery(name = "Categoria.maxId", query = "SELECT MAX(c.idCategoria) FROM Categoria c")
     , @NamedQuery(name = "Categoria.findByIdCategoria", query = "SELECT c FROM Categoria c WHERE c.idCategoria = :idCategoria")
     , @NamedQuery(name = "Categoria.findByNombre", query = "SELECT c FROM Categoria c WHERE c.nombre = :nombre")})
 public class Categoria implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Id
     @Basic(optional = false)
     @Column(name = "idCategoria", nullable = false)
-    private Integer idCategoria;
+    public Integer idCategoria;
+
     @Basic(optional = false)
     @Column(name = "nombre", nullable = false, length = 200)
-    private String nombre;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCategoria", fetch = FetchType.LAZY)
-    private List<Producto> productoList;
 
-    public Categoria() {
-    }
+    public String nombre;
 
-    public Categoria(Integer idCategoria) {
-        this.idCategoria = idCategoria;
-    }
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoria", fetch = FetchType.LAZY)
+    public List<Producto> productos;
 
-    public Categoria(Integer idCategoria, String nombre) {
-        this.idCategoria = idCategoria;
-        this.nombre = nombre;
-    }
-
-    public Integer getIdCategoria() {
-        return idCategoria;
-    }
-
-    public void setIdCategoria(Integer idCategoria) {
-        this.idCategoria = idCategoria;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public List<Producto> getProductoList() {
-        return productoList;
-    }
-
-    public void setProductoList(List<Producto> productoList) {
-        this.productoList = productoList;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idCategoria != null ? idCategoria.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Categoria)) {
-            return false;
-        }
-        Categoria other = (Categoria) object;
-        if ((this.idCategoria == null && other.idCategoria != null) || (this.idCategoria != null && !this.idCategoria.equals(other.idCategoria))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "sv.edu.uesocc.disenio2018.resbar.backend.entities.Categoria[ idCategoria=" + idCategoria + " ]";
-    }
-    
 }
