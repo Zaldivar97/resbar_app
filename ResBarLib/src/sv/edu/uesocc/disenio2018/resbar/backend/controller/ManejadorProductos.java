@@ -137,7 +137,7 @@ public class ManejadorProductos {
         EntityManager eml = getEM();
         try {
             Query query = eml.createNamedQuery("Producto.findByCategoria");
-            query.setParameter("categoria", id);
+            query.setParameter("idCategoria", id);
             return query.getResultList();
         } catch (Exception ex) {
             throw new ErrorApplication("ManejadorProductos.ObtenerxCategoria(:int)$Algo fallo intentando obtener producto con ID categoria: " + ex.getMessage());

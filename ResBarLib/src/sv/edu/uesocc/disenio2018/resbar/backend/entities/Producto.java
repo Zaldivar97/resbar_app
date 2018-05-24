@@ -57,4 +57,5 @@ public class Producto implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "producto", fetch = FetchType.LAZY)
     public List<DetalleOrden> detalleOrdenList;
 
+    
 }
