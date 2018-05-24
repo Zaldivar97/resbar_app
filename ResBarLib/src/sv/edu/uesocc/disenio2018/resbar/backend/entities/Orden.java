@@ -22,10 +22,13 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.eclipse.persistence.jpa.jpql.parser.DateTime;
-import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorApplication;
+import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorAplicacion;
 
 /**
- * @author zaldivar
+ * Clase: Orden. La clase “Orden” representa un objeto que describe las órdenes
+ * que se están manejando con detalle generales de las órdenes. Propiedades a
+ * comentar: Para que un objeto orden sea válido, debe poseer valor en al menos
+ * uno de sus campos: mesero, mesa o cliente.
  */
 @Entity
 @Table(name = "Orden", catalog = "resbar", schema = "")
@@ -92,15 +95,21 @@ public class Orden implements Serializable {
         return Persistence.createEntityManagerFactory("ResbarBackendPU").createEntityManager();
     }
 
-    public void calcularTotal() {
+    /**
+     * Método: CalcularTotal() Almacena el total de consumo de la orden, para
+     * ello recorre toda su colección DETALLE multiplicando el precio unitario
+     * por la cantidad y luego sumándolo para al final actualizar la propiedad
+     * total de la orden con el valor correcto.
+     */
+    public void CalcularTotal() {
         EntityManager eml = getEM();
         try {
             Query q = eml.createNamedQuery("Orden.calcularTotal");
             q.setParameter("idOrden", this.idOrden);
-            this.total = (BigDecimal)q.getSingleResult();
+            this.total = (BigDecimal) q.getSingleResult();
 
         } catch (Exception ex) {
-            throw new ErrorApplication("Error al calcular el total de la orden --> $Orden.calcularTotal()"+ex.getMessage());
+            throw new ErrorAplicacion("Error al calcular el total de la orden --> $Orden.calcularTotal()" + ex.getMessage());
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -108,12 +117,20 @@ public class Orden implements Serializable {
         }
     }
 
-    public void agregarProducto(Producto producto, double cant) {
-        
-        if(cant<0){
-            throw new ErrorApplication("La cantidad debe ser mayor a cero --> $Orden.agregarProducto()");
+    /**
+     * Método: AgregarProducto(:producto,cant:double) Permite agregar más
+     * productos a la orden, toma el objeto producto y la cantidad para
+     * construir un objeto DetalleOrden, y luego ver si ese producto ya está
+     * agregado a la orden, si ya está agregado a la orden, entonces solo se
+     * suma la cantidad, sino se agrega a la colección DETALLE de la orden y se
+     * invoca calcular total.
+     */
+    public void AgregarProducto(Producto producto, double cant) {
+
+        if (cant < 0) {
+            throw new ErrorAplicacion("La cantidad debe ser mayor a cero --> $Orden.agregarProducto()");
         }
-        
+
         EntityManager eml = getEM();
 
         DetalleOrden detalleOrden = new DetalleOrden();
@@ -126,15 +143,15 @@ public class Orden implements Serializable {
         detalleOrden.detalleOrdenPK = detalleOrdenPK;
 
         boolean encontrado = false;
-        
-        for(DetalleOrden d : this.detalle){
-            if(Objects.equals(d.producto.idProducto, detalleOrden.producto.idProducto)){
+
+        for (DetalleOrden d : this.detalle) {
+            if (Objects.equals(d.producto.idProducto, detalleOrden.producto.idProducto)) {
                 encontrado = true;
                 d.cantidad.add(new BigDecimal(cant));
             }
         }
-        
-        if(!encontrado){
+
+        if (!encontrado) {
             this.detalle.add(detalleOrden);
         }
 
@@ -145,21 +162,25 @@ public class Orden implements Serializable {
             }
             eml.merge(this);
             et.commit();
-            this.calcularTotal();
+            this.CalcularTotal();
         } catch (Exception ex) {
             if (et.isActive()) {
                 et.rollback();
             }
-            throw new ErrorApplication("Algo fallo intentando insertar un nuevo producto --> $Orden.AgregarProducto() ---> " + ex.getMessage());
+            throw new ErrorAplicacion("Algo fallo intentando insertar un nuevo producto --> $Orden.AgregarProducto() ---> " + ex.getMessage());
         } finally {
             if (eml.isOpen()) {
                 eml.close();
-                this.calcularTotal();
+                this.CalcularTotal();
             }
         }
     }
 
-    public void eliminarProducto(Producto producto, double cant) {
+    /**
+     * Método: EliminarProducto(:producto,cant:double) Permite eliminar
+     * productos de una orden y actualiza el total de la orden.
+     */
+    public void EliminarProducto(Producto producto, double cant) {
         EntityManager eml = getEM();
         try {
             if (cant > 0) {
@@ -173,11 +194,11 @@ public class Orden implements Serializable {
                 q.setParameter("idProducto", producto.idProducto);
             }
         } catch (Exception ex) {
-            throw new ErrorApplication("Error al eliminar productos de la orden --> $Orden.eliminarProductos()"+ex.getMessage());
+            throw new ErrorAplicacion("Error al eliminar productos de la orden --> $Orden.eliminarProductos()" + ex.getMessage());
         } finally {
             if (eml.isOpen()) {
                 eml.close();
-                this.calcularTotal();
+                this.CalcularTotal();
             }
         }
     }

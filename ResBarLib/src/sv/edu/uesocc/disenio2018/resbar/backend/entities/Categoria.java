@@ -14,7 +14,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * @author zaldivar
+ * Clase: Categoria. La clase “Categoria” representa un objeto categoría con
+ * todas sus propiedades establecidas, cada categoría contiene una colección de
+ * productos. Propiedades a comentar: La propiedad productos tendrá una
+ * colección de objetos de la clase producto.
  */
 @Entity
 @Table(name = "Categoria", catalog = "resbar", schema = "")
@@ -36,7 +39,7 @@ public class Categoria implements Serializable {
     @Column(name = "nombre", nullable = false, length = 200)
     public String nombre;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoria", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoria", fetch = FetchType.LAZY)
     public List<Producto> productos;
 
 }
