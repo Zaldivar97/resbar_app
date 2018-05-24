@@ -140,7 +140,7 @@ public class ManejadorProductos {
             query.setParameter("categoria", id);
             return query.getResultList();
         } catch (Exception ex) {
-            throw new ErrorApplication("ManejadorProductos.ObtenerxCategoria(:int)$Algo fallo intentando obtener producto con ID categoria: " + id);
+            throw new ErrorApplication("ManejadorProductos.ObtenerxCategoria(:int)$Algo fallo intentando obtener producto con ID categoria: " + ex.getMessage());
 
         } finally {
             if (eml.isOpen()) {
