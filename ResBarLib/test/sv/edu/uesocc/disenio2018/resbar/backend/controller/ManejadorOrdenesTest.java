@@ -2,12 +2,10 @@ package sv.edu.uesocc.disenio2018.resbar.backend.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -16,9 +14,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
-import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorApplication;
-import sv.edu.uesocc.disenio2018.resbar.backend.entities.DetalleOrden;
-import sv.edu.uesocc.disenio2018.resbar.backend.entities.DetalleOrdenPK;
+import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorAplicacion;
 import sv.edu.uesocc.disenio2018.resbar.backend.entities.Orden;
 import sv.edu.uesocc.disenio2018.resbar.backend.entities.Producto;
 
@@ -138,7 +134,7 @@ public class ManejadorOrdenesTest {
 
     }
 
-//    @Test(expected = ErrorApplication.class)
+//    @Test(expected = ErrorAplicacion.class)
 //    public void testInsertarSinDetalle() {
 //        System.out.println("**** insertar Sin Detalle");
 //
@@ -192,7 +188,7 @@ public class ManejadorOrdenesTest {
     /**
      * Test of Eliminar method, of class ManejadorOrdenes.
      */
-    @Test(expected = ErrorApplication.class)
+    @Test(expected = ErrorAplicacion.class)
     public void ztestEliminar() {
         System.out.println("eliminar");
         Orden orden = ManejadorOrdenes.Obtener(9);

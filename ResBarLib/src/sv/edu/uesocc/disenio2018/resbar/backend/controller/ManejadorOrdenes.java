@@ -9,11 +9,12 @@ import javax.persistence.Query;
 import javax.persistence.TemporalType;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorApplication;
+import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorAplicacion;
 import sv.edu.uesocc.disenio2018.resbar.backend.entities.Orden;
 
 /**
- * @author zaldivar
+ * ManejadorOrdenes. Clase encargada de los servicios para las órdenes, los
+ * métodos de esta clase también serán STATIC.
  */
 public class ManejadorOrdenes {
 
@@ -21,6 +22,11 @@ public class ManejadorOrdenes {
         return Persistence.createEntityManagerFactory("ResbarBackendPU").createEntityManager();
     }
 
+    /**
+     * Método: ObtenerActivas(): Orden[] Va a la base de datos y filtra todas
+     * las ordenes cuyo campo Activa=TRUE, y devuelve un colección de objetos
+     * Orden.
+     */
     public static List<Orden> ObtenerActivas() {
         EntityManager eml = getEM();
         try {
@@ -28,7 +34,8 @@ public class ManejadorOrdenes {
             q.setParameter("estado", true);
             return q.getResultList();
         } catch (Exception e) {
-            throw new ErrorApplication("ManejadorOrdenes.ObtenerActivas()$Error al obtener ordenes activas"+e.getMessage());
+            throw new ErrorAplicacion("ManejadorOrdenes.ObtenerActivas()$Error al obtener ordenes activas"+e.getMessage());
+
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -36,14 +43,23 @@ public class ManejadorOrdenes {
         }
     }
 
+    /**
+     * Método: Obtener(:int):Orden Recibe un entero que indica el ID de la orden
+     * y luego devuelve el objeto orden completo que corresponde.
+     */
     public static Orden Obtener(int id) {
+        if (id <= 0) {
+            throw new ErrorAplicacion("ManejadorOrdenes.Obtener(:int)$El ID debe ser mayor a cero");
+        }
+
         EntityManager eml = getEM();
         try {
             Query q = eml.createNamedQuery("Orden.findByIdOrden");
             q.setParameter("idOrden", id);
             return (Orden) q.getSingleResult();
         } catch (Exception e) {
-            throw new ErrorApplication("ManejadorOrdenes.Obtener(:int)$Error al obtener orden con id " + id+e.getMessage());
+            throw new ErrorAplicacion("ManejadorOrdenes.Obtener(:int)$Error al obtener orden con id " + id+e.getMessage());
+
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -51,6 +67,14 @@ public class ManejadorOrdenes {
         }
     }
 
+    /**
+     * Método: Insertar(:orden) Inserta el objeto orden en la base de datos,
+     * inserta una tupla en la tabla Orden y una o varias tuplas en la tabla
+     * Detalle Orden, además verifica que la orden tenga al menos uno de los
+     * campos con valor: mesero, mesa o cliente, no permite insertar ordenes con
+     * un total de cero o negativo, o que NO posean ningún producto en su
+     * detalle.
+     */
     public static void Insertar(Orden orden) {
         if (!orden.mesero.isEmpty() || !orden.mesa.isEmpty() || !orden.cliente.isEmpty()) {
             if (orden.detalle != null) {
@@ -67,7 +91,8 @@ public class ManejadorOrdenes {
                         if (et.isActive()) {
                             et.rollback();
                         }
-                        throw new ErrorApplication("ManejadorOrdenes.Insertar(:orden)$Algo fallo intentando insertar un nueva orden"+ex.getMessage());
+                        throw new ErrorAplicacion("ManejadorOrdenes.Insertar(:orden)$Algo fallo intentando insertar un nueva orden"+ex.getMessage());
+
                     } finally {
                         if (eml.isOpen()) {
                             eml.close();
@@ -75,16 +100,20 @@ public class ManejadorOrdenes {
 
                     }
                 } else {
-                    throw new ErrorApplication("ManejadorOrdenes.Insertar(:orden)$La orden debe tener al menos un producto");
+                    throw new ErrorAplicacion("ManejadorOrdenes.Insertar(:orden)$La orden debe tener al menos un producto");
                 }
             } else {
-                throw new ErrorApplication("ManejadorOrdenes.Insertar(:orden)$La orden debe tener al menos un producto");
+                throw new ErrorAplicacion("ManejadorOrdenes.Insertar(:orden)$La orden debe tener al menos un producto");
             }
         } else {
-            throw new ErrorApplication("ManejadorOrdenes.Insertar(:orden)$Al menos uno de los siguientes campos debe tener un valor: mesero, mesa, cliente");
+            throw new ErrorAplicacion("ManejadorOrdenes.Insertar(:orden)$Al menos uno de los siguientes campos debe tener un valor: mesero, mesa, cliente");
         }
     }
 
+    /**
+     * Método: Eliminar(o: orden) Elimina dicha orden de la base de datos,
+     * eliminando sus detalles también.
+     */
     public static void Eliminar(Orden orden) {
         EntityManager eml = getEM();
         EntityTransaction trans = eml.getTransaction();
@@ -100,7 +129,8 @@ public class ManejadorOrdenes {
             if (trans.isActive()) {
                 trans.rollback();
             }
-            throw new ErrorApplication("ManejadorOrdenes.Eliminar(:orden)$Error al eliminar orden"+ex.getMessage());
+
+            throw new ErrorAplicacion("ManejadorOrdenes.Eliminar(:orden)$Error al eliminar orden"+ex.getMessage());
 
         } finally {
 
@@ -108,6 +138,14 @@ public class ManejadorOrdenes {
         }
     }
 
+    /**
+     * Método: Actualizar(o: orden) Toma un objeto orden que ya existe en la
+     * tabla Orden de la base de datos, luego verifica que el objeto orden tenga
+     * productos, que su total sea mayor que cero, en la base de datos hace
+     * update de la tabla orden, y para la tabla Detalle Orden, lo que se hace
+     * es que se eliminan las tuplas de dicha orden y luego se insertan de
+     * nuevo.
+     */
     public static void Actualizar(Orden orden) {
 
         if (!orden.mesero.isEmpty() || !orden.mesa.isEmpty() || !orden.cliente.isEmpty()) {
@@ -125,7 +163,7 @@ public class ManejadorOrdenes {
                     if (et.isActive()) {
                         et.rollback();
                     }
-                    throw new ErrorApplication("ManejadorOrdenes.Actualizar(:orden)$Error al actualizar orden"+ex.getMessage());
+                    throw new ErrorAplicacion("ManejadorOrdenes.Actualizar(:orden)$Error al actualizar orden"+ex.getMessage());
                 } finally {
                     if (eml.isOpen()) {
                         eml.close();
@@ -133,13 +171,17 @@ public class ManejadorOrdenes {
                 }
 
             } else {
-                throw new ErrorApplication("ManejadorOrdenes.Actualizar(:orden)$La orden debe tener al menos un producto");
+                throw new ErrorAplicacion("ManejadorOrdenes.Actualizar(:orden)$La orden debe tener al menos un producto");
             }
         } else {
-            throw new ErrorApplication("ManejadorOrdenes.Actualizar(:orden)$Al menos uno de los siguientes campos debe tener un valor: mesero, mesa, cliente");
+            throw new ErrorAplicacion("ManejadorOrdenes.Actualizar(:orden)$Al menos uno de los siguientes campos debe tener un valor: mesero, mesa, cliente");
         }
     }
 
+    /**
+     * Método: ObtenerId(): integer Va a la base de datos y obtiene el ultimo Id
+     * de orden y le suma 1.
+     */
     public static int ObtenerId() {
         EntityManager eml = getEM();
         try {
@@ -149,7 +191,7 @@ public class ManejadorOrdenes {
             Query q = eml.createQuery(cq);
             return ((int) q.getSingleResult()) + 1;
         } catch (Exception e) {
-            throw new ErrorApplication("ManejadorOrdenes.ObtenerId()$Error al obtener ID de Orden");
+            throw new ErrorAplicacion("ManejadorOrdenes.ObtenerId()$Error al obtener ID de Orden");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -157,6 +199,13 @@ public class ManejadorOrdenes {
         }
     }
 
+    /**
+     * Método: BuscarActivas(:string):Orden[] Toma el string que tiene el
+     * criterio de búsqueda y va a la base de datos a buscar todas aquellas
+     * ordenes que cumplan con dicho criterio ya sea en el mesero, mesa, cliente
+     * o comentario. Devuelve una colección de órdenes que cumplen con dicho
+     * criterio sin duplicados.
+     */
     public static List<Orden> BuscarActivas(String parametro) {
         EntityManager eml = getEM();
         try {
@@ -164,7 +213,7 @@ public class ManejadorOrdenes {
             q.setParameter("parametro", parametro);
             return q.getResultList();
         } catch (Exception e) {
-            throw new ErrorApplication("ManejadorOrdenes.BuscarActivas(:String)$Algo fallo intentando buscar ordenes activas");
+            throw new ErrorAplicacion("ManejadorOrdenes.BuscarActivas(:String)$Algo fallo intentando buscar ordenes activas");
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -172,6 +221,12 @@ public class ManejadorOrdenes {
         }
     }
 
+    /**
+     * Método: ObtenerVentas(:Date;Date) : Orden[] Igual que el metodo
+     * ObtenerVentas(:Date): Orden[] pero filtrando por un rango de fechas.
+     * Importante en este método es que los objetos Orden NO tienen cargado el
+     * detalle de sus productos.
+     */
     public static List<Orden> ObtenerVentas(Date inicio, Date fin) {
         EntityManager eml = getEM();
         try {
@@ -180,7 +235,7 @@ public class ManejadorOrdenes {
             q.setParameter("fin", fin, TemporalType.DATE);
             return q.getResultList();
         } catch (Exception e) {
-            throw new ErrorApplication("ManejadorOrdenes.ObtenerVentas(:Date,:Date)$Error al obtenerVentas con fechas " + inicio + " - " + fin);
+            throw new ErrorAplicacion("ManejadorOrdenes.ObtenerVentas(:Date,:Date)$Error al obtenerVentas con fechas " + inicio + " - " + fin);
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -188,6 +243,12 @@ public class ManejadorOrdenes {
         }
     }
 
+    /**
+     * Método: ObtenerVentas(:Date): Orden[] Obtiene todas las ventas realizadas
+     * para una fecha determinada, se filtra solo por día mes y año, las ordenes
+     * devueltas tienen que tener el campo activa en FALSE, pues son ordenes que
+     * ya fueron cobradas.
+     */
     public static List<Orden> ObtenerVentas(Date inicio) {
         return ManejadorOrdenes.ObtenerVentas(inicio, inicio);
     }
