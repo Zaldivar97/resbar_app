@@ -54,6 +54,7 @@ public class ManejadorProductosTest {
     @Test
     public void testInsertar() {
         System.out.println("insertar");
+
         Producto producto = new Producto();
         producto.idProducto = ManejadorProductos.ObtenerID();
         producto.nombre = "Insertado en una prueba!!!!";
