@@ -36,7 +36,7 @@ public class ManejadorCategorias {
                 Query query = eml.createNamedQuery("Categoria.findAll");
                 return query.getResultList();
             } catch (Exception ex) {
-                throw new ErrorAplicacion("ManejadorCategorias.Obtener(:boolean)$Fallo obtener lista de categorias"+ex.getMessage());
+                throw new ErrorAplicacion("ManejadorCategorias.Obtener(:boolean)$Fallo obtener lista de categorias");
 
             } finally {
                 if (eml.isOpen()) {
@@ -48,7 +48,7 @@ public class ManejadorCategorias {
                 Query query = eml.createNamedQuery("Categoria.findAll");
                 return query.getResultList();
             } catch (Exception ex) {
-                throw new ErrorAplicacion("ManejadorCategorias.Obtener(:boolean)$Fallo obtener lista de categorias sin detalles"+ex.getMessage());
+                throw new ErrorAplicacion("ManejadorCategorias.Obtener(:boolean)$Fallo obtener lista de categorias sin detalles");
 
             } finally {
                 if (eml.isOpen()) {
@@ -77,7 +77,7 @@ public class ManejadorCategorias {
                 if (et.isActive()) {
                     et.rollback();
                 }
-                throw new ErrorAplicacion("ManejadorCategorias.Actualizar(:categoria)$Fallo actualizar la categoria"+ex.getMessage());
+                throw new ErrorAplicacion("ManejadorCategorias.Actualizar(:categoria)$Fallo actualizar la categoria");
 
             } finally {
                 if (eml.isOpen()) {
@@ -108,7 +108,7 @@ public class ManejadorCategorias {
                 if (et.isActive()) {
                     et.rollback();
                 }
-                throw new ErrorAplicacion("ManejadorCategorias.Insertar(:categoria)$Fallo al crear la categoria"+ex.getMessage());
+                throw new ErrorAplicacion("ManejadorCategorias.Insertar(:categoria)$Fallo al crear la categoria");
 
             } finally {
                 if (eml.isOpen()) {
@@ -139,7 +139,7 @@ public class ManejadorCategorias {
             if (trans.isActive()) {
                 trans.rollback();
             }
-            throw new ErrorAplicacion("ManejadorCategorias.Eliminar(:categoria)$Fallo eliminar la categoria"+ex.getMessage());
+            throw new ErrorAplicacion("ManejadorCategorias.Eliminar(:categoria)$Fallo eliminar la categoria");
         } finally {
             eml.close();
         }
@@ -159,7 +159,7 @@ public class ManejadorCategorias {
             Query q = eml.createQuery(cq);
             return ((int) q.getSingleResult()) + 1;
         } catch (Exception ex) {
-            throw new ErrorAplicacion("ManejadorCategorias.ObtenerId()$Fallo obtener ID para la nueva categoria"+ex.getMessage());
+            throw new ErrorAplicacion("ManejadorCategorias.ObtenerId()$Fallo obtener ID para la nueva categoria");
 
         } finally {
             if (eml.isOpen()) {
