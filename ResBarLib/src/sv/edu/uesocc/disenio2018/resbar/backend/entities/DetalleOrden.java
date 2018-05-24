@@ -14,7 +14,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
- * @author zaldivar
+ * Clase: DetalleOrden. La clase “DetalleOrden” representa un objeto detalle de
+ * orden con todas sus propiedades establecidas. Propiedades a comentar: La
+ * propiedad producto tiene un objeto de la clase producto.
  */
 @Entity
 @Table(name = "DetalleOrden", catalog = "resbar", schema = "")

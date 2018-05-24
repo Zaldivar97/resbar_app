@@ -25,7 +25,10 @@ import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorApplication;
 
 /**
- * @author zaldivar
+ * Clase: Orden. La clase “Orden” representa un objeto que describe las órdenes
+ * que se están manejando con detalle generales de las órdenes. Propiedades a
+ * comentar: Para que un objeto orden sea válido, debe poseer valor en al menos
+ * uno de sus campos: mesero, mesa o cliente.
  */
 @Entity
 @Table(name = "Orden", catalog = "resbar", schema = "")
@@ -97,10 +100,10 @@ public class Orden implements Serializable {
         try {
             Query q = eml.createNamedQuery("Orden.calcularTotal");
             q.setParameter("idOrden", this.idOrden);
-            this.total = (BigDecimal)q.getSingleResult();
+            this.total = (BigDecimal) q.getSingleResult();
 
         } catch (Exception ex) {
-            throw new ErrorApplication("Error al calcular el total de la orden --> $Orden.calcularTotal()"+ex.getMessage());
+            throw new ErrorApplication("Error al calcular el total de la orden --> $Orden.calcularTotal()" + ex.getMessage());
         } finally {
             if (eml.isOpen()) {
                 eml.close();
@@ -109,11 +112,11 @@ public class Orden implements Serializable {
     }
 
     public void agregarProducto(Producto producto, double cant) {
-        
-        if(cant<0){
+
+        if (cant < 0) {
             throw new ErrorApplication("La cantidad debe ser mayor a cero --> $Orden.agregarProducto()");
         }
-        
+
         EntityManager eml = getEM();
 
         DetalleOrden detalleOrden = new DetalleOrden();
@@ -126,15 +129,15 @@ public class Orden implements Serializable {
         detalleOrden.detalleOrdenPK = detalleOrdenPK;
 
         boolean encontrado = false;
-        
-        for(DetalleOrden d : this.detalle){
-            if(Objects.equals(d.producto.idProducto, detalleOrden.producto.idProducto)){
+
+        for (DetalleOrden d : this.detalle) {
+            if (Objects.equals(d.producto.idProducto, detalleOrden.producto.idProducto)) {
                 encontrado = true;
                 d.cantidad.add(new BigDecimal(cant));
             }
         }
-        
-        if(!encontrado){
+
+        if (!encontrado) {
             this.detalle.add(detalleOrden);
         }
 
@@ -173,7 +176,7 @@ public class Orden implements Serializable {
                 q.setParameter("idProducto", producto.idProducto);
             }
         } catch (Exception ex) {
-            throw new ErrorApplication("Error al eliminar productos de la orden --> $Orden.eliminarProductos()"+ex.getMessage());
+            throw new ErrorApplication("Error al eliminar productos de la orden --> $Orden.eliminarProductos()" + ex.getMessage());
         } finally {
             if (eml.isOpen()) {
                 eml.close();
