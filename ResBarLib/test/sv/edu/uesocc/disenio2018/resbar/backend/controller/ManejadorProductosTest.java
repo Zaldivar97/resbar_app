@@ -67,6 +67,8 @@ public class ManejadorProductosTest {
         System.out.println("insertar");
         Producto producto = new Producto(ManejadorProductos.obtenerID(), "Insertado en una prueba!!!!", BigDecimal.ONE, 'B');
         Categoria categoria = ManejadorCategorias.obtener(2);
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX ---> "+categoria.getProductoList());
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX ---> size: "+categoria.getProductoList().size());
         producto.setIdCategoria(categoria);
         ManejadorProductos.insertar(producto);
         Producto expected = ManejadorProductos.obtener(producto.getIdProducto());
