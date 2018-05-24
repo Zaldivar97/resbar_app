@@ -126,7 +126,7 @@ public class Orden implements Serializable {
      */
     public void AgregarProducto(Producto producto, double cant) {
 
-        if (cant < 0) {
+        if (cant <= 0) {
             throw new ErrorAplicacion("Orden.AgregarProducto()$La cantidad debe ser mayor a cero");
         }
 
@@ -180,7 +180,7 @@ public class Orden implements Serializable {
      * productos de una orden y actualiza el total de la orden.
      */
     public void EliminarProducto(Producto producto, double cant) {
-        if (cant < 0) {
+        if (cant <= 0) {
             throw new ErrorAplicacion("Orden.EliminarProducto()$La cantidad debe ser mayor a cero");
         }
         
