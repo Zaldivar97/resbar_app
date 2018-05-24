@@ -11,7 +11,9 @@ import sv.edu.uesocc.disenio2018.resbar.backend.controller.exceptions.ErrorAppli
 import sv.edu.uesocc.disenio2018.resbar.backend.entities.Producto;
 
 /**
- * @author zaldivar
+ * ManejadorProductos. Clase Controladora que brinda servicios para los
+ * diferentes acciones a realizar con los objetos productos, los métodos de esta
+ * clase son STATIC.
  */
 public class ManejadorProductos {
 
@@ -133,6 +135,12 @@ public class ManejadorProductos {
         }
     }
 
+    /**
+     * Método: ObtenerxCategoria(IdCat:integer): Producto[] Realiza una petición
+     * a la base de datos y devuelve una colección de objetos productos que se
+     * corresponden con el Identificador de categoría que se pasó como
+     * parámetro.
+     */
     public static List<Producto> ObtenerxCategoria(int id) {
         EntityManager eml = getEM();
         try {
@@ -149,6 +157,12 @@ public class ManejadorProductos {
         }
     }
 
+    /**
+     * Método: Buscar(:String): Producto[] Toma la cadena pasada como parametro
+     * como criterio de búsqueda, para ir a la base de datos y buscar todos los
+     * productos cuyo Id o nombre coincida con el criterio de búsqueda, luego
+     * devuelve la colección de productos, sin devolver productos duplicados
+     */
     public static List<Producto> Buscar(String charSequence) {
         EntityManager eml = getEM();
         try {

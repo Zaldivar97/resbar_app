@@ -14,7 +14,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * @author zaldivar
+ * Clase: Categoria. La clase “Categoria” representa un objeto categoría con
+ * todas sus propiedades establecidas, cada categoría contiene una colección de
+ * productos. Propiedades a comentar: La propiedad productos tendrá una
+ * colección de objetos de la clase producto.
  */
 @Entity
 @Table(name = "Categoria", catalog = "resbar", schema = "")

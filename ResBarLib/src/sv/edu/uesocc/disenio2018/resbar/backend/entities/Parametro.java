@@ -10,7 +10,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
- * @author zaldivar
+ * Clase: Parametro. La clase “Parametro” representa un objeto parámetro con
+ * todas sus propiedades establecidas.
  */
 @Entity
 @Table(name = "Parametro", catalog = "resbar", schema = "")
