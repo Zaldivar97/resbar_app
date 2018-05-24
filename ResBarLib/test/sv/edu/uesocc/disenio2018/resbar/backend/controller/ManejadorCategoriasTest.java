@@ -53,9 +53,10 @@ public class ManejadorCategoriasTest {
     @Test
     public void btestObtener() {
         System.out.println("Obtener");
-        boolean withDetails = true;
+        boolean withDetails = false;
         int expected = 3;
         List<Categoria> result = ManejadorCategorias.Obtener(withDetails);
+        System.out.println("******** Detalles de categoria: "+result.get(0).productos);
         assertEquals(expected, result.size());
     }
 
