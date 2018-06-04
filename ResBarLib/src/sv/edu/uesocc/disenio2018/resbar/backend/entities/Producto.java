@@ -61,5 +61,53 @@ public class Producto implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "producto", fetch = FetchType.LAZY)
     public List<DetalleOrden> detalleOrdenList;
 
+    public Integer getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(Integer idProducto) {
+        this.idProducto = idProducto;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public BigDecimal getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(BigDecimal precio) {
+        this.precio = precio;
+    }
+
+    public Character getArea() {
+        return area;
+    }
+
+    public void setArea(Character area) {
+        this.area = area;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    public List<DetalleOrden> getDetalleOrdenList() {
+        return detalleOrdenList;
+    }
+
+    public void setDetalleOrdenList(List<DetalleOrden> detalleOrdenList) {
+        this.detalleOrdenList = detalleOrdenList;
+    }
+
     
 }

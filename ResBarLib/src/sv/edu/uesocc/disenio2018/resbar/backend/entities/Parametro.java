@@ -37,4 +37,28 @@ public class Parametro implements Serializable {
     @Column(name = "valor", nullable = false, length = 400)
     public String valor;
 
+    public Integer getIdParametro() {
+        return idParametro;
+    }
+
+    public void setIdParametro(Integer idParametro) {
+        this.idParametro = idParametro;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getValor() {
+        return valor;
+    }
+
+    public void setValor(String valor) {
+        this.valor = valor;
+    }
+
 }

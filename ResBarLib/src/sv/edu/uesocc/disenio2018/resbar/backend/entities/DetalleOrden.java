@@ -44,4 +44,36 @@ public class DetalleOrden implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     public Producto producto;
 
+    public DetalleOrdenPK getDetalleOrdenPK() {
+        return detalleOrdenPK;
+    }
+
+    public void setDetalleOrdenPK(DetalleOrdenPK detalleOrdenPK) {
+        this.detalleOrdenPK = detalleOrdenPK;
+    }
+
+    public BigDecimal getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(BigDecimal cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public Orden getOrden() {
+        return orden;
+    }
+
+    public void setOrden(Orden orden) {
+        this.orden = orden;
+    }
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
 }
