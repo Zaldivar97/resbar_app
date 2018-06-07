@@ -3,6 +3,7 @@ package sv.edu.uesocc.disenio2018.resbar.backend.entities;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
